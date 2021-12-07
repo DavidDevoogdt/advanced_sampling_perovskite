@@ -1,3 +1,1 @@
-work in progress
-
-Identifying 
+repo to test several recent advanced sampling methods on perofskites. <a href="https://github.com/DavidDevoogdt/advanced_sampling_perovskite/blob/master/roadmap/main.pdf" target="_blank"> temporary report</a>.
