@@ -1,0 +1,159 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+%\usepackage[dutch]{babel} % English hyphenation etc.
+
+\usepackage[margin=1.5in]{geometry}
+\usepackage{url} % Fancy url's
+\usepackage{graphicx}
+\usepackage{caption}% Captions onder figuur gecentreerdhyp
+\usepackage[toc,page]{appendix}
+\usepackage{subcaption} % Subfigure environment 
+\usepackage{float}
+\usepackage{hyperref}
+%\usepackage{hyperref}
+\usepackage{siunitx} % Elegant eenheden zetten
+\usepackage[version=3]{mhchem} % ingeven van chemische fomules
+\usepackage{cleveref} % Paragraaf tekens
+\usepackage[T1]{fontenc}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{grffile}%double dot in fugure name
+\usepackage{textcomp} %gets rid of warnings of gensymb
+\usepackage{gensymb}
+\usepackage{adjustbox}
+\usepackage{booktabs}
+
+\usepackage{amsmath} % Mathematical symbols
+\usepackage{amssymb} % Symbols
+\usepackage{amsfonts}
+\usepackage{listings}
+
+\usepackage{cite}
+
+\title{Roadmap }
+\author{David Devoogdt }
+\date{}
+\begin{document}
+
+\maketitle
+
+\section{Goal}
+
+\section{Optimal selection of predefined reaction coordinates}
+
+There exist quite some methods to make an optimal selection of a number of predefined collective variables. While this is very useful, it still requires some insight in the reaction mechnism before sampling begins. Therefore, these methods are not very usefull without prior knowledge. These methods iteratively selct better RC and generate new md data with the selected RC.
+
+\paragraph{linear combinations} The most limited form includes making a linear combination of a pool of preselected order parameters.
+
+time-lagged independ component analysis (tICA) \cite{Tiwary2016}. Selects linear combination based on dominant eigenvalue of transition matrix. The functions in tICA themselves can be non-linear (kernel tICA) and faster version exisist (e.g. hTICA)
+
+SGOOP \cite{Tiwary2016} optimises based on a different principle (mninmising spactral gap). SGOOP-d improves upon the idea by using commute distance from \cite{noe2016}.
+
+\paragraph{reinforcement learning based adaptive sampling (REAP) } \cite{Shamsi2018} clusters explored structures. The reaction coordinate is changed and initial structures are selected such that the explore the most unsampled regions.
+
+\section{Manifold learning}
+
+Manifold learning assumes that the given high dimensional data is in essence sampled from a low dimensional space. The aim is to transform the data back to a low dimensional manifold without distorting the distances between points. Dimension reduction algorithm stend to fall into two categories; those that seek to preserve the pairwise distance structure amongst all the data samples and those that favor thep reservation of local distances over global distance.\cite{McInnes2018}
+
+Succesful examples of these techniques include IsoMap \cite{Tenenbaum1995} and DMAPS \cite{Coifman2006} Current state of the art techniques are  t-SNE \cite{vanDerMaarten2008} and  UMAP  \cite{McInnes2018}. The methods from manifold learning are mostly quite mathematical in nature, but broadly applicable.
+
+These methods are generally not directly linked to QM simulations. In essence the points of a MD trajectory form a low dimensional manifold. The idea here is to select alternatively select better collective variables (learnt by the techniques above) and produce new MD trajectories based on these improved CV's
+
+\subsection{DMAPS}
+
+difusion maps (DMAPS)\cite{Coifman2006} construct an affinity matrix K (which measures in some sense how similar 2 configurations are, e.g. with radial basis funciton kernel). The d largest eigendevectors of normalised K servers as low dimensional coordinates.
+
+Some methods build on this by running short MD simulations, performing a manifiold learning technique and spawn new MD simulation outside currently sampled portion of phase space. diffusion-map directed MD (\cite{Preto2014}) and intrinsic map dynamics iMapd\cite{Chiavazzo2017}. This doesn't need any prior knowledge of the system.
+
+Diffusion nets (DNETS) \cite{Mishne2015} uses and encoder and decoder to learn the DMAPS mapping between rounds. This makes the problem better behaved and allows to use the autoencoder as CV.
+
+\subsection{t-SNE}
+t-Distributed Stochastic Neighbor Embedding (t-SNE) \cite{vanDerMaarten2008} centers gaussians around every original point $x_i$ and t-distributions around every point in embedded space $y_i$. The KL differgence if minimised such that $p(i|j) = q(i|j)$ with p the neighbourg probability in x space and q in y space. embedding parameters are learned. \cite{Rydzewski2021} uses WT-MetaD to explore phase space, and uses a NN  map x to y.
+
+Active enhanced sampling \cite{Zhang2018} is similar in spirit: it also minimises KL div between 2 representations
+
+\subsection{UMAP}\label{ss:umap}
+
+The theory behind uniform manifold approximation and projection (UMAP) \cite{McInnes2018} is based on manifold theory and topological data analysis. The paper explains it in language of catagory theory, and hence this it is certainly too much effort to try to understand it. The computational version is still quite difficult. Luckily there is a reference implementation on github.
+
+In \cite{Trozzi2021}, this method is gauged against PCA, tICA and t-SNE for a biomolecule. The generated CV's are competitive with t-SNE but have smaller time complexity.
+
+\section{Information bottleneck }
+
+Many algorithm use an autoencoder as dimensionality reduction. Mostly, the sampled data is put trough a neural network with a bottleneck (layer with few (latent) variables).
+
+\subsection{VAMPnets  }
+In VAMPnets \cite{Mardt2017}, info and time lagged info is put through 2 network lobes which learn latent variables $\chi_0$ $\chi_1$ related by matrix K (function of $\chi_x$). This constructs a MSM.
+
+\subsection{autoencoders}
+
+The neural network is trained to recover its input as autput (autoencoder). The learned latent variables are used in a new round of enhanced sampling. This continues untill the CV do not change anymore \cite{Chen2018}.
+
+As a variation, \cite{Hooft2021} trains 2 genetic algoritms: 1 selects CV's from pool of possible CV's (encoder), and a second NN acts as decoder
+
+The autoencoders are much less prone to noise if gaussian noise is added to the latent variables (Variation auto encoders) \cite{Shoberl2019,Hernandez2017,Bozkurt2020}.
+Predicting time lagged output also improves reliability, as only slow modes are learned \cite{Wehmeyer2018,Hernandez2017}
+
+The latest methods use bayesian learning to construct the network. These methods are all able to construct good course grained markov state models. State Predictive Information Bottleneck (SPIB) \cite{Wang2021} learns state label instead of configuration and constructs MSM's. Is able to predict commitor probability. Uses mixture of gaussian as prior. \cite{Shoberl2019} autoencoders with good results. Gaussian mixture VAE \cite{Bozkurt2020}: Uses gaussians mixture (sum of gaussians with different center) as prior distribution.
+
+\section{Normalising Flows}\label{s:BG}
+
+Another recent parameter free technique is boltzman generators \cite{Noe2019}, rooted in the normalising flows (ML technique). The idea is to make an invertible map between a prior distribution (e.g. gaussian) and the desired boltzman distribution $p(x)=e^{-\beta U(x)}$. This can be thought of as scaling the distribution around every point with a suitable jacobian.. The mappping function is an invertible neural network. The training of these network happen in 2 different ways:
+
+1) sample vectors z from prior distribution and transforms them to real configurations $X=F_{zx}(z)$. Each round, the KL divergence between the sampled distribution $p_{X}(x)$ and the real distribution $p(x)=e^{-\beta U(x)}$ is minimised by adjusting the weights and biases of the NN map. A round requires around 1000 samples from prior.
+
+2) Valid samples are taken form an existing MD trajectory, and are transformed to the prior space $Z = F_{xz}(x)$. Here, the Maximal likelyhood is minimised (compared to the prior gaussian distribution)
+
+Some improvements were already made. In \cite{kohler2019}, some relevant physical symmetries of the the physcial space X are taken into account (i.e. permutations of atoms, global rotationsm,...). In \cite{Dibak2021}, the flow is temperature steerable, meaning that the output distribution $F_{xz}$ can be scaled based on the desired temperature. This is possible because $p(x,t') = [e^{-\frac{U(x)}{k t} } ]^{\frac{t}{t'}} =  p(x,t)^{t/t'} $. By suitably selecting the map, the prior can be sampled and trained at any temp. Metropolis algorithm is needed to select unbiased samples
+
+\section{ General Adversarial Networks }
+Another technique from
+
+Targeted Adversarial Learning Optimized Sampling (TALOS) \cite{Zhang2019}
+
+\section{Path-based methods}
+
+\paragraph{Transition Path Sampling (TPS) }
+
+Transiution path sampling takes one known path between 2 phases and from there samples a number of reaction path between the states to determine the statistical properties. Path are accepted based on a mtropolis sampling criterium. see e.g. \cite{Dellago1998}.
+
+In the recente paper \cite{Jung2019}, the committor probability is stored in an NN.
+
+There are some difficulties related to TPS: only one path can be sampled, slow, and initial path needs to be known (and be a faithful path)
+
+\paragraph{Metadynamics of paths } \cite{Mandelli2020} combines metaD and path sampling. seems slow for large systems?
+
+\section{tricks}
+
+RAVE maps learned variables back to combination of preselected variables
+
+\section{Selected methods for Perovskites}
+
+This section list the methods that will be tested for perovskite toy model. The idea is to choose a state-of-the-art model from each different type and compare their performance.
+
+\paragraph{REAP} \cite{Shamsi2018},\href{https://github.com/ShuklaGroup/REAP-ReinforcementLearningBasedAdaptiveSampling}{git}.
+
+This is one of the few methods left in the list that explcitly uses preselected coordinates. This might be handy if the phase diagram needs to be compared against other methods
+
+\paragraph{UMAP} \cref{ss:umap} \href{https://github.com/lmcinnes/umap}{git}
+
+Umap seems the most promising and scalable method in monifold mapping.
+
+\paragraph{SPIB} \cite{Wang2021} \href{https://github.com/tiwarylab/State-Predictive-Information-Bottleneck}{git}
+
+This uses all recent advances in for autoencoders: bayesians interference learning, time lagging and it produces a reliable MSM
+
+\paragraph{Boltzman generators}  \cref{s:BG} \href{https://github.com/noegroup/bgflow}{git}
+
+The group of Frank Noé is the only group which develops boltzamn generators/normalising flows at the moment, and this git repository contains all the variants (equivariant, temperature steering).
+
+\paragraph{GAN} skip - too early
+
+\paragraph{Path based methods} skip for the moment, because accurate initial trajectory is needed.
+
+\section{Results}
+todo
+
+\bibliographystyle{ieeetr}
+\bibliography{bib}
+\end{document}

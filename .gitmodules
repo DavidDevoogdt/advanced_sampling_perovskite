@@ -1,0 +1,12 @@
+[submodule "REAP-ReinforcementLearningBasedAdaptiveSampling"]
+	path = REAP-ReinforcementLearningBasedAdaptiveSampling
+	url = git@github.com:ShuklaGroup/REAP-ReinforcementLearningBasedAdaptiveSampling.git
+[submodule "umap"]
+	path = umap
+	url = git@github.com:lmcinnes/umap.git
+[submodule "State-Predictive-Information-Bottleneck"]
+	path = State-Predictive-Information-Bottleneck
+	url = git@github.com:tiwarylab/State-Predictive-Information-Bottleneck.git
+[submodule "bgflow"]
+	path = bgflow
+	url = git@github.com:noegroup/bgflow.git

@@ -1,0 +1,671 @@
+@article{Bailleul2020,
+  abstract  = {The methylation reaction of ethene with methanol over the Brønsted acidic ZSM-5 catalyst is one of the prototype reactions within zeolite catalysis for which experimental kinetic data is available. It is one of the premier reactions within the methanol-to-olefins process and has been the subject of extensive theoretical testing to predict the reaction rates. Herein, we apply, for the first time, first principle molecular dynamics methods to determine the intrinsic reaction kinetics taking into account the full configurational entropy. As chemical reactions are rare events, enhanced sampling methods are necessary to obtain sufficient sampling of the configurational space at the activated region. A plethora of methods is available which depend on specific choices like the selection of collective variables along which the dynamics is enhanced. Herein, a thorough first principle molecular dynamics study is presented to determine the reaction kinetics via various enhanced MD techniques on an exemplary reaction within zeolite catalysis for which reference theoretical and experimental data are available.},
+  author    = {Simon Bailleul and Karen Dedecker and Pieter Cnudde and Louis Vanduyfhuys and Michel Waroquier and Veronique Van Speybroeck},
+  doi       = {10.1016/j.jcat.2020.04.015},
+  issn      = {10902694},
+  journal   = {Journal of Catalysis},
+  keywords  = {Collective variables,DFT,Enhanced sampling,Ethene methylation,Molecular dynamics,ZSM-5},
+  month     = {8},
+  pages     = {38-51},
+  publisher = {Academic Press},
+  title     = {Ab initio enhanced sampling kinetic study on MTO ethene methylation reaction},
+  volume    = {388},
+  year      = {2020}
+}
+
+@article{Rydzewski2021,
+  abstract = {Machine learning methods provide a general framework for automatically finding and representing the essential characteristics of simulation data. This task is particularly crucial in enhanced sampling simulations. There we seek a few generalized degrees of freedom, referred to as collective variables (CVs), to represent and drive the sampling of the free energy landscape. In theory, these CVs should separate different metastable states and correspond to the slow degrees of freedom of the studied physical process. To this aim, we propose a new method that we call multiscale reweighted stochastic embedding (MRSE). Our work builds upon a parametric version of stochastic neighbor embedding. The technique automatically learns CVs that map a high-dimensional feature space to a low-dimensional latent space via a deep neural network. We introduce several new advancements to stochastic neighbor embedding methods that make MRSE especially suitable for enhanced sampling simulations: (1) weight-tempered random sampling as a landmark selection scheme to obtain training data sets that strike a balance between equilibrium representation and capturing important metastable states lying higher in free energy; (2) a multiscale representation of the high-dimensional feature space via a Gaussian mixture probability model; and (3) a reweighting procedure to account for training data from a biased probability distribution. We show that MRSE constructs low-dimensional CVs that can correctly characterize the different metastable states in three model systems: the Mü ller-Brown potential, alanine dipeptide, and alanine tetrapeptide.},
+  author   = {Jakub Rydzewski and Omar Valsson},
+  doi      = {10.1021/acs.jpca.1c02869},
+  journal  = {J. Phys. Chem. A},
+  pages    = {6302},
+  title    = {Multiscale Reweighted Stochastic Embedding: Deep Learning of Collective Variables for Enhanced Sampling},
+  volume   = {125},
+  url      = {https://doi.org/10.1021/acs.jpca.1c02869},
+  year     = {2021}
+}
+
+@article{Rogal2019,
+  abstract = {We propose a rigorous construction of a 1D path collective variable to sample structural phase transformations in condensed matter. The path collective variable is defined in a space spanned by global collective variables that serve as classifiers derived from local structural units. A reliable identification of local structural environments is achieved by employing a neural network based classification. The 1D path collective variable is subsequently used together with enhanced sampling techniques to explore the complex migration of a phase boundary during a solid-solid phase transformation in molybdenum. Efficient sampling of high-dimensional conformational spaces represented by rough potential energy landscapes constitutes a significant challenge in the computational molecular sciences, particularly when different basins on the landscape are separated by energy barriers significantly higher than k B T. In order to address this challenge , various enhanced sampling techniques have been developed including accelerated molecular dynamics [1-5], transition path sampling [6-9], metadynamics [10-13], and (driven) adiabatic free energy dynamics (d-AFED) [14-16] or temperature accelerated molecular dynamics (TAMD) [17] and combinations of these [18, 19]. In many cases the sampling, and in essentially all cases the analysis of the resulting high-dimensional free-energy landscapes, requires a projection onto a low-dimensional collective variable (CV) space. Indeed, the choice of the CVs is not always intuitive, but a meaningful representation in the low-dimensional space is crucial for capturing the correct mechanisms. Machine learning (ML) can provide a powerful approach to address the aforementioned challenges. The last decade has seen significant advances in the use of electronic structure calculations to train ML potentials for atomistic simulations capable of reaching large systems sizes and long time scales with accurate and reliable energies and forces. More recently, ML approaches have proved useful in learning high-dimensional free-energy surfaces (FESs) [20, 21], and in providing a low-dimensional set of CVs [22, 23]. In such approaches, however , it is often difficult to interpret the low-dimensional CVs that emerge from the learning procedure as they emerge as abstract outputs of the ML model employed. In this letter, we overcome this difficulty by exploiting an ML model to identify local atomic structures and then using the ML output to construct a physically motivated one-dimensional CV. The latter is then employed with an enhanced configurational sampling scheme to char-acterise structural phase transformations in condensed matter. The basic idea of our approach is generally applicable to tackle different kinds of phases transformations. A structural phase transformation can be viewed as a global change of the entire system that is associated with and driven by changes in the local structural environment around each atom (or other structural building blocks such as molecules). Furthermore, for each phase of interest (different crystalline structures, liquid and amorphous phases) we can define a distinct CV that quantifies the amount of a particular phase within the system. These global CVs form an n-dimensional space of clasi-fiers where n is the number of phases and any transformation between different structures can be described as a path in this classifier space. For each path we can construct a one-dimensional path collective variable [24] as a non-linear combination of the global classifier CVs. The path CV can then be used in an enhanced sampling scheme, to project free energies, or to analyse the mechanism along the transformation. Our approach to derive the 1D path CV correspondingly involves three steps: first, we use a classification neural network (NN) [25, 26] to identify the local structural environment around each atom in terms of the involved phases; next, this local information is combined into global classifier CVs, e.g. as the fraction of each structure in the system; finally, we define a path that connects two phases in the classifier space and compute the corresponding path CV. As an illustration of our approach, we study the solid-solid transformation between the topologically close-packed (TCP) A15 and the body-centred cubic (bcc) phase in molybdenum. TCP phases are of particular interest in high-performance materials such a Ni-base su-peralloys [27] as their formation significantly influences the materials properties [28]. In tungsten, the transformation between the A15 and bcc phase has recently attracted increased attention [29, 30] since for applica},
+  author   = {Jutta Rogal and Elia Schneider and Mark E Tuckerman},
+  title    = {Neural network based path collective variables for enhanced sampling of phase transformations},
+  year     = {2019}
+}
+
+@article{Perlmutter2019,
+  abstract = {The scattering transform is a multilayered wavelet-based deep learning architecture that acts as a model of convolutional neural networks. Recently, several works have introduced generalizations of the scattering transform for non-Euclidean settings such as graphs. Our work builds upon these constructions by introducing windowed and non-windowed graph scattering transforms based upon a very general class of asymmetric wavelets. We show that these asymmetric graph scattering transforms have many of the same theoretical guarantees as their symmetric counterparts. This work helps bridge the gap between scattering and other graph neural networks by introducing a large family of networks with provable stability and invariance guarantees. This lays the groundwork for future deep learning architectures for graph-structured data that have learned filters and also provably have desirable theoretical properties.},
+  author   = {Michael Perlmutter and Feng Gao and Guy Wolf and Matthew Hirn},
+  title    = {Understanding Graph Neural Networks with Asymmetric Geometric Scattering Transforms},
+  year     = {2019}
+}
+
+@article{Hirn2015,
+  abstract = {We present a novel approach to the regression of quantum mechanical energies based on a scattering transform of an intermediate electron density representation. A scattering transform is a deep convolution network computed with a cascade of multiscale wavelet transforms. It possesses appropriate invariant and stability properties for quantum energy regression. This new framework removes fundamental limitations of Coulomb matrix based energy regressions, and numerical experiments give state-of-the-art accuracy over planar molecules.},
+  author   = {Matthew Hirn and Nicolas Poilvert and Stéphane Mallat},
+  title    = {Quantum Energy Regression using Scattering Transforms},
+  url      = {http://arxiv.org/abs/1502.02077},
+  year     = {2015}
+}
+
+
+@article{Gao2019,
+  abstract = {We explore the generalization of scattering transforms from traditional (e.g., image or audio) signals to graph data, analogous to the generalization of ConvNcts in geometric deep learning, and the utility of extracted graph features in graph data analysis. In particular, we focus on the capacity of these features to retain informative variability and relations in the data (e.g., between individual graphs, or in aggregate), while relating our construction to previous theoretical results that establish the stability of similar transforms to families of graph deformations. We demonstrate the application of our geometric scattering features in graph classification of social network data, and in data exploration of biochemistry data.},
+  author   = {Feng Gao and Guy Wolf and Matthew Hirn},
+  isbn     = {9781510886988},
+  journal  = {36th International Conference on Machine Learning, ICML 2019},
+  pages    = {3702-3711},
+  title    = {Geometric scattering for graph data analysis},
+  volume   = {2019-June},
+  year     = {2019}
+}
+
+@article{Hirschfeld2020,
+  abstract = {Uncertainty quantification (UQ) is an important component of molecular property prediction, particularly for drug discovery applications where model predictions direct experimental design and where unanticipated imprecision wastes valuable time and resources. The need for UQ is especially acute for neural models, which are becoming increasingly standard yet are challenging to interpret. While several approaches to UQ have been proposed in the literature, there is no clear consensus on the comparative performance of these models. In this paper, we study this question in the context of regression tasks. We systematically evaluate several methods on five regression data sets using multiple complementary performance metrics. Our experiments show that none of the methods we tested is unequivocally superior to all others, and none produces a particularly reliable ranking of errors across multiple data sets. While we believe that these results show that existing UQ methods are not sufficient for all common use cases and further research is needed, we conclude with a practical recommendation as to which existing techniques seem to perform well relative to others.},
+  author   = {Lior Hirschfeld and Kyle Swanson and Kevin Yang and Regina Barzilay and Connor W. Coley},
+  doi      = {10.1021/acs.jcim.0c00502},
+  issn     = {15205142},
+  issue    = {8},
+  journal  = {Journal of Chemical Information and Modeling},
+  pages    = {3770-3780},
+  pmid     = {32702986},
+  title    = {Uncertainty Quantification Using Neural Networks for Molecular Property Prediction},
+  volume   = {60},
+  url      = {https://dx.doi.org/10.1021/acs.jcim.0c00502},
+  year     = {2020}
+}
+
+@article{Shutt2017,
+  abstract  = {Deep learning has the potential to revolutionize quantum chemistry as it is ideally suited to learn representations for structured data and speed up the exploration of chemical space. While convolutional neural networks have proven to be the first choice for images, audio and video data, the atoms in molecules are not restricted to a grid. Instead, their precise locations contain essential physical information, that would get lost if discretized. Thus, we propose to use continuous-filter convolutional layers to be able to model local correlations without requiring the data to lie on a grid. We apply those layers in SchNet: a novel deep learning architecture modeling quantum interactions in molecules. We obtain a joint model for the total energy and interatomic forces that follows fundamental quantum-chemical principles. Our architecture achieves state-of-the-art performance for benchmarks of equilibrium molecules and molecular dynamics trajectories. Finally, we introduce a more challenging benchmark with chemical and structural variations that suggests the path for further work.},
+  author    = {K. T. Schütt and P. J. Kindermans and H. E. Sauceda and S. Chmiela and A. Tkatchenko and K. R. Müller},
+  issn      = {10495258},
+  journal   = {Advances in Neural Information Processing Systems},
+  month     = {6},
+  pages     = {992-1002},
+  publisher = {Neural information processing systems foundation},
+  title     = {SchNet: A continuous-filter convolutional neural network for modeling quantum interactions},
+  volume    = {2017-Decem},
+  url       = {https://arxiv.org/abs/1706.08566v5},
+  year      = {2017}
+}
+
+@article{Satorras2021,
+  abstract = {This paper introduces a new model to learn graph neural networks equivariant to rotations, translations, reflections and permutations called E(n)-Equivariant Graph Neural Networks (EGNNs). In contrast with existing methods, our work does not require computationally expensive higher-order representations in intermediate layers while it still achieves competitive or better performance. In addition, whereas existing methods are limited to equivariance on 3 dimensional spaces, our model is easily scaled to higher-dimensional spaces. We demonstrate the effectiveness of our method on dynamical systems modelling, representation learning in graph autoencoders and predicting molecular properties.},
+  author   = {Victor Garcia Satorras and Emiel Hoogeboom and Max Welling},
+  title    = {E(n) Equivariant Graph Neural Networks},
+  url      = {http://arxiv.org/abs/2102.09844},
+  year     = {2021}
+}
+@article{Klicpera2020,
+  abstract = {Graph neural networks have recently achieved great successes in predicting quantum mechanical properties of molecules. These models represent a molecule as a graph using only the distance between atoms (nodes). They do not, however, consider the spatial direction from one atom to another, despite directional information playing a central role in empirical potentials for molecules, e.g. in angular potentials. To alleviate this limitation we propose directional message passing, in which we embed the messages passed between atoms instead of the atoms themselves. Each message is associated with a direction in coordinate space. These directional message embeddings are rotationally equivariant since the associated directions rotate with the molecule. We propose a message passing scheme analogous to belief propagation, which uses the directional information by transforming messages based on the angle between them. Additionally, we use spherical Bessel functions and spherical harmonics to construct theoretically well-founded, orthogonal representations that achieve better performance than the currently prevalent Gaussian radial basis representations while using fewer than 1/4 of the parameters. We leverage these innovations to construct the directional message passing neural network (DimeNet). DimeNet outperforms previous GNNs on average by 76% on MD17 and by 31% on QM9. Our implementation is available online.},
+  author   = {Johannes Klicpera and Janek Groß and Stephan Günnemann},
+  month    = {3},
+  title    = {Directional Message Passing for Molecular Graphs},
+  url      = {http://arxiv.org/abs/2003.03123},
+  year     = {2020}
+}
+
+@article{Lubbers2018,
+  abstract = {We introduce the Hierarchically Interacting Particle Neural Network (HIP-NN) to model molecular properties from datasets of quantum calculations. Inspired by a many-body expansion, HIP-NN decomposes properties, such as energy, as a sum over hierarchical terms. These terms are generated from a neural network - a composition of many nonlinear transformations - acting on a representation of the molecule. HIP-NN achieves the state-of-the-art performance on a dataset of 131k ground state organic molecules and predicts energies with 0.26 kcal/mol mean absolute error. With minimal tuning, our model is also competitive on a dataset of molecular dynamics trajectories. In addition to enabling accurate energy predictions, the hierarchical structure of HIP-NN helps to identify regions of model uncertainty.},
+  author   = {Nicholas Lubbers and Justin S. Smith and Kipton Barros},
+  doi      = {10.1063/1.5011181},
+  isbn     = {1710.00017v1},
+  issn     = {00219606},
+  issue    = {24},
+  journal  = {Journal of Chemical Physics},
+  pmid     = {29960311},
+  title    = {Hierarchical modeling of molecular energies using a deep neural network},
+  volume   = {148},
+  year     = {2018}
+}
+
+@article{Fuchs2020,
+  abstract = {We introduce the SE(3)-Transformer, a variant of the self-attention module for 3D point clouds and graphs, which is equivariant under continuous 3D roto-translations. Equivariance is important to ensure stable and predictable performance in the presence of nuisance transformations of the data input. A positive corollary of equivariance is increased weight-tying within the model. The SE(3)-Transformer leverages the benefits of self-attention to operate on large point clouds and graphs with varying number of points, while guaranteeing SE(3)-equivariance for robustness. We evaluate our model on a toy N-body particle simulation dataset, showcasing the robustness of the predictions under rotations of the input. We further achieve competitive performance on two real-world datasets, ScanObjectNN and QM9. In all cases, our model outperforms a strong, non-equivariant attention baseline and an equivariant model without attention.},
+  author   = {Fabian B Fuchs and Daniel E Worrall and Volker Fischer and Max Welling},
+  title    = {SE(3)-Transformers: 3D Roto-Translation Equivariant Attention Networks},
+  url      = {https://github.com/FabianFuchsML/se3-transformer-public}
+}
+
+
+
+
+@generic{Dral2020,
+  abstract  = {As the quantum chemistry (QC) community embraces machine learning (ML), the number of new methods and applications based on the combination of QC and ML is surging. In this Perspective, a view of the current state of affairs in this new and exciting research field is offered, challenges of using machine learning in quantum chemistry applications are described, and potential future developments are outlined. Specifically, examples of how machine learning is used to improve the accuracy and accelerate quantum chemical research are shown. Generalization and classification of existing techniques are provided to ease the navigation in the sea of literature and to guide researchers entering the field. The emphasis of this Perspective is on supervised machine learning.},
+  author    = {Pavlo O. Dral},
+  doi       = {10.1021/acs.jpclett.9b03664},
+  issn      = {19487185},
+  issue     = {6},
+  journal   = {Journal of Physical Chemistry Letters},
+  month     = {3},
+  pages     = {2336-2347},
+  pmid      = {32125858},
+  publisher = {American Chemical Society},
+  title     = {Quantum Chemistry in the Age of Machine Learning},
+  volume    = {11},
+  url       = {https://pubs.acs.org/doi/full/10.1021/acs.jpclett.9b03664},
+  year      = {2020}
+}
+
+@article{Unke2019,
+  abstract  = {In recent years, machine learning (ML) methods have become increasingly popular in computational chemistry. After being trained on appropriate ab initio reference data, these methods allow for accurately predicting the properties of chemical systems, circumventing the need for explicitly solving the electronic Schrödinger equation. Because of their computational efficiency and scalability to large data sets, deep neural networks (DNNs) are a particularly promising ML algorithm for chemical applications. This work introduces PhysNet, a DNN architecture designed for predicting energies, forces, and dipole moments of chemical systems. PhysNet achieves state-of-the-art performance on the QM9, MD17, and ISO17 benchmarks. Further, two new data sets are generated in order to probe the performance of ML models for describing chemical reactions, long-range interactions, and condensed phase systems. It is shown that explicitly including electrostatics in energy predictions is crucial for a qualitatively correct description of the asymptotic regions of a potential energy surface (PES). PhysNet models trained on a systematically constructed set of small peptide fragments (at most eight heavy atoms) are able to generalize to considerably larger proteins like deca-alanine (Ala10): The optimized geometry of helical Ala10 predicted by PhysNet is virtually identical to ab initio results (RMSD = 0.21 Å). By running unbiased molecular dynamics (MD) simulations of Ala10 on the PhysNet-PES in gas phase, it is found that instead of a helical structure, Ala10 folds into a "wreath-shaped" configuration, which is more stable than the helical form by 0.46 kcal mol-1 according to the reference ab initio calculations.},
+  author    = {Oliver T. Unke and Markus Meuwly},
+  doi       = {10.1021/acs.jctc.9b00181},
+  issn      = {15499626},
+  issue     = {6},
+  journal   = {Journal of Chemical Theory and Computation},
+  pages     = {3678-3693},
+  pmid      = {31042390},
+  publisher = {American Chemical Society},
+  title     = {PhysNet: A Neural Network for Predicting Energies, Forces, Dipole Moments, and Partial Charges},
+  volume    = {15},
+  year      = {2019}
+}
+
+@article{Qiao2021,
+  abstract = {Equivariant neural networks have been successful in incorporating various types of symmetries, but are mostly limited to vector representations of geometric objects. Despite the prevalence of higher-order tensors in various application domains, e.g. in quantum chemistry, equivariant neural networks for general tensors remain underexplored. Previous strategies for learning equivariant functions on tensors mostly rely on expensive tensor factorization which is not scalable when the dimensionality of the problem becomes large. In this work, we propose unitary N-body tensor equivariant neural network (UNiTE), an architecture for a general class of symmetric tensors called N-body tensors. The proposed neural network is equivariant with respect to the actions of a unitary group, such as the group of 3D rotations. Furthermore, it has a linear time complexity with respect to the number of non-zero elements in the tensor. When applied to quantum chemistry, UNiTE in combination with a low-cost physics-based molecular representation outperforms state-of-the-art machine learning methods on multiple benchmarks. Finally, we show that UNiTE achieves a robust zero-shot generalization performance on diverse down stream chemistry tasks, while being three orders of magnitude faster than conventional numerical methods with competitive accuracy.},
+  author   = {Zhuoran Qiao and Anders S Christensen and Matthew Welborn and Frederick R Manby and Anima Anandkumar and Thomas F Miller III},
+  title    = {UNiTE: Unitary N-body Tensor Equivariant Network with Applications to Quantum Chemistry}
+}
+
+@article{Unke2021,
+  abstract = {Machine-learned force fields (ML-FFs) combine the accuracy of ab initio methods with the efficiency of conventional force fields. However, current ML-FFs typically ignore electronic degrees of freedom, such as the total charge or spin state, and assume chemical locality, which is problematic when molecules have inconsistent electronic states, or when nonlocal effects play a significant role. This work introduces SpookyNet, a deep neural network for constructing ML-FFs with explicit treatment of electronic degrees of freedom and quantum nonlocality. Chemically meaningful inductive biases and analytical corrections built into the network architecture allow it to properly model physical limits. SpookyNet improves upon the current state-of-the-art (or achieves similar performance) on popular quantum chemistry data sets. Notably, it is able to generalize across chemical and conformational space and can leverage the learned chemical insights, e.g. by predicting unknown spin states, thus helping to close a further important remaining gap for today's machine learning models in quantum chemistry.},
+  author   = {Oliver T Unke and Stefan Chmiela and Michael Gastegger and Kristof T Schütt and Huziel E Sauceda and Klaus-Robert Müller},
+  keywords = {SpookyNet,delocalized interactions,electronic degrees of freedom,force field,machine learning,neural network,nonlocal,potential energy surface,quantum nature,spooky},
+  title    = {SpookyNet: Learning Force Fields with Electronic Degrees of Freedom and Nonlocal Effects}
+}
+
+@article{Shutt2021b,
+  abstract = {Message passing neural networks have become a method of choice for learning on graphs, in particular the prediction of chemical properties and the acceleration of molecular dynamics studies. While they readily scale to large training data sets, previous approaches have proven to be less data efficient than kernel methods. We identify limitations of invariant representations as a major reason and extend the message passing formulation to rotationally equivariant representations. On this basis, we propose the polarizable atom interaction neural network (PaiNN) and improve on common molecule benchmarks over previous networks, while reducing model size and inference time. We leverage the equivariant atomwise representations obtained by PaiNN for the prediction of tensorial properties. Finally, we apply this to the simulation of molecular spectra, achieving speedups of 4-5 orders of magnitude compared to the electronic structure reference.},
+  author   = {Kristof T Schütt and Oliver T Unke and Michael Gastegger},
+  title    = {Equivariant message passing for the prediction of tensorial properties and molecular spectra}
+}
+
+@article{Hooft2021,
+  abstract        = {With the continual improvement of computing hardware and algorithms, simulations have become a powerful tool for understanding all sorts of (bio)molecular processes. To handle the large simulation data sets and to accelerate slow, activated transitions, a condensed set of descriptors, or collective variables (CVs), is needed to discern the relevant dynamics that describes the molecular process of interest. However, proposing an adequate set of CVs that can capture the intrinsic reaction coordinate of the molecular transition is often extremely difficult. Here, we present a framework to find an optimal set of CVs from a pool of candidates using a combination of artificial neural networks and genetic algorithms. The approach effectively replaces the encoder of an autoencoder network with genes to represent the latent space, i.e., the CVs. Given a selection of CVs as input, the network is trained to recover the atom coordinates underlying the CV values at points along the transition. The network performance is used as an estimator of the fitness of the input CVs. Two genetic algorithms optimize the CV selection and the neural network architecture. The successful retrieval of optimal CVs by this framework is illustrated at the hand of two case studies: the well-known conformational change in the alanine dipeptide molecule and the more intricate transition of a base pair in B-DNA from the classic Watson-Crick pairing to the alternative Hoogsteen pairing. Key advantages of our framework include the following: optimal interpretable CVs, avoiding costly calculation of committor or time-correlation functions, and automatic hyperparameter optimization. In addition, we show that applying a time-delay between the network input and output allows for enhanced selection of slow variables. Moreover, the network can also be used to generate molecular configurations of unexplored microstates, for example, for augmentation of the simulation data.},
+  author          = {Hooft, Ferry and {P{\'{e}}rez De Alba Ort{\'{i}}z}, Alberto and Ensing, Bernd},
+  doi             = {10.1021/acs.jctc.0c00981},
+  file            = {:home/david/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Hooft et al. - 2021 - Discovering Collective Variables of Molecular Transitions via Genetic Algorithms and Neural Networks.pdf:pdf},
+  issn            = {15499626},
+  journal         = {Journal of Chemical Theory and Computation},
+  mendeley-groups = {Sampling},
+  number          = {4},
+  pages           = {2294--2306},
+  pmid            = {33662202},
+  title           = {{Discovering Collective Variables of Molecular Transitions via Genetic Algorithms and Neural Networks}},
+  url             = {https://dx.doi.org/10.1021/acs.jctc.0c00981},
+  volume          = {17},
+  year            = {2021}
+}
+
+@article{Sidky2020,
+  abstract  = {Classical molecular dynamics simulates the time evolution of molecular systems through the phase space spanned by the positions and velocities of the constituent atoms. Molecular-level thermodynamic, kinetic, and structural data extracted from the resulting trajectories provide valuable information for the understanding, engineering, and design of biological and molecular materials. The cost of simulating many-body atomic systems makes simulations of large molecules prohibitively expensive, and the high-dimensionality of the resulting trajectories presents a challenge for analysis. Driven by advances in algorithms, hardware, and data availability, there has been a flare of interest in recent years in the applications of machine learning–especially deep learning–to molecular simulation. These techniques have demonstrated great power and flexibility in both extracting mechanistic understanding of the important nonlinear collective variables governing the dynamics of a molecular system, and in furnishing good low-dimensional system representations with which to perform enhanced sampling or develop long-timescale dynamical models. It is the purpose of this article to introduce the key machine learning approaches, describe how they are married with statistical mechanical theory into domain-specific tools, and detail applications of these approaches in understanding and accelerating biomolecular simulation.},
+  author    = {Hythem Sidky and Wei Chen and Andrew L. Ferguson},
+  doi       = {10.1080/00268976.2020.1737742},
+  issn      = {13623028},
+  issue     = {5},
+  journal   = {Molecular Physics},
+  keywords  = {collective variables,deep learning,enhanced sampling,machine learning,molecular simulation},
+  month     = {3},
+  publisher = {Taylor and Francis Ltd.},
+  title     = {Machine learning for collective variable discovery and enhanced sampling in biomolecular simulation},
+  volume    = {118},
+  year      = {2020}
+}
+
+@article{Noe2019,
+  abstract  = {Computing equilibrium states in condensed-matter many-body systems, such as solvated proteins, is a long-standing challenge. Lacking methods for generating statistically independent equilibrium samples in “one shot,” vast computational effort is invested for simulating these systems in small steps, e.g., using molecular dynamics. Combining deep learning and statistical mechanics, we developed Boltzmann generators, which are shown to generate unbiased one-shot equilibrium samples of representative condensed-matter systems and proteins. Boltzmann generators use neural networks to learn a coordinate transformation of the complex configurational equilibrium distribution to a distribution that can be easily sampled. Accurate computation of free-energy differences and discovery of new configurations are demonstrated, providing a statistical mechanics tool that can avoid rare events during sampling without prior knowledge of reaction coordinates.},
+  author    = {Frank Noé and Simon Olsson and Jonas Köhler and Hao Wu},
+  doi       = {10.1126/SCIENCE.AAW1147},
+  issn      = {1095-9203},
+  issue     = {6457},
+  journal   = {Science (New York, N.Y.)},
+  keywords  = {Frank Noé,Hao Wu,MEDLINE,NCBI,NIH,NLM,National Center for Biotechnology Information,National Institutes of Health,National Library of Medicine,Non-U.S. Gov't,PubMed Abstract,Research Support,Simon Olsson,doi:10.1126/science.aaw1147,pmid:31488660},
+  month     = {9},
+  pmid      = {31488660},
+  publisher = {Science},
+  title     = {Boltzmann generators: Sampling equilibrium states of many-body systems with deep learning},
+  volume    = {365},
+  url       = {https://pubmed.ncbi.nlm.nih.gov/31488660/},
+  year      = {2019}
+}
+
+@article{Coifman2006,
+  abstract  = {In this paper, we provide a framework based upon diffusion processes for finding meaningful geometric descriptions of data sets. We show that eigenfunctions of Markov matrices can be used to construct coordinates called diffusion maps that generate efficient representations of complex geometric structures. The associated family of diffusion distances, obtained by iterating the Markov matrix, defines multiscale geometries that prove to be useful in the context of data parametrization and dimensionality reduction. The proposed framework relates the spectral properties of Markov processes to their geometric counterparts and it unifies ideas arising in a variety of contexts such as machine learning, spectral graph theory and eigenmap methods. © 2006.},
+  author    = {Ronald R. Coifman and Stéphane Lafon},
+  doi       = {10.1016/J.ACHA.2006.04.006},
+  issn      = {1063-5203},
+  issue     = {1},
+  journal   = {Applied and Computational Harmonic Analysis},
+  keywords  = {Diffusion metric,Diffusion processes,Dimensionality reduction,Eigenmaps,Graph Laplacian,Manifold learning},
+  month     = {7},
+  pages     = {5-30},
+  publisher = {Academic Press},
+  title     = {Diffusion maps},
+  volume    = {21},
+  year      = {2006}
+}
+
+@article{Chen2018,
+  abstract  = {Auto-associative neural networks ("autoencoders") present a powerful nonlinear dimensionality reduction technique to mine data-driven collective variables from molecular simulation trajectories. This technique furnishes explicit and differentiable expressions for the nonlinear collective variables, making it ideally suited for integration with enhanced sampling techniques for accelerated exploration of configurational space. In this work, we describe a number of sophistications of the neural network architectures to improve and generalize the process of interleaved collective variable discovery and enhanced sampling. We employ circular network nodes to accommodate periodicities in the collective variables, hierarchical network architectures to rank-order the collective variables, and generalized encoder-decoder architectures to support bespoke error functions for network training to incorporate prior knowledge. We demonstrate our approach in blind collective variable discovery and enhanced sampling of the configurational free energy landscapes of alanine dipeptide and Trp-cage using an open-source plugin developed for the OpenMM molecular simulation package.},
+  author    = {Wei Chen and Aik Rui Tan and Andrew L. Ferguson},
+  doi       = {10.1063/1.5023804},
+  issn      = {00219606},
+  issue     = {7},
+  journal   = {Journal of Chemical Physics},
+  month     = {8},
+  pmid      = {30134681},
+  publisher = {American Institute of Physics Inc.},
+  title     = {Collective variable discovery and enhanced sampling using autoencoders: Innovations in network architecture and error function design},
+  volume    = {149},
+  year      = {2018}
+}
+
+@article{Steele2019,
+  abstract = {The high-temperature, all-inorganic CsPbI3 perovskite black phase is metastable relative to its yellow, nonperovskite phase at room temperature. Because only the black phase is optically active, this represents an impediment for the use of CsPbI3 in optoelectronic devices. We report the use of substrate clamping and biaxial strain to render black-phase CsPbI3 thin films stable at room temperature. We used synchrotron-based, grazing incidence, wide-angle x-ray scattering to track the introduction of crystal distortions and strain-driven texture formation within black CsPbI3 thin films when they were cooled after annealing at 330°C. The thermal stability of black CsPbI3 thin films is vastly improved by the strained interface, a response verified by ab initio thermodynamic modeling.},
+  author   = {Julian A. Steele and Handong Jin and Iurii Dovgaliuk and Robert F. Berger and Tom Braeckevelt and Haifeng Yuan and Cristina Martin and Eduardo Solano and Kurt Lejaeghere and Sven M.J. Rogge and Charlotte Notebaert and Wouter Vandezande and Kris P.F. Janssen and Bart Goderis and Elke Debroye and Ya Kun Wang and Yitong Dong and Dongxin Ma and Makhsud Saidaminov and Hairen Tan and Zhenghong Lu and Vadim Dyadkin and Dmitry Chernyshov and Veronique Van Speybroeck and Edward H. Sargent and Johan Hofkens and Maarten B.J. Roeffaers},
+  doi      = {10.1126/science.aax3878},
+  issn     = {10959203},
+  issue    = {6454},
+  journal  = {Science},
+  pages    = {679-684},
+  pmid     = {31346140},
+  title    = {Thermal unequilibrium of strained black CsPbI3 thin films},
+  volume   = {365},
+  year     = {2019}
+}
+
+@article{steele2020,
+  author = {Julian A Steele and Tom Braeckevelt and Vittal Prakasam and Haifeng Yuan and Handong Jin and Pascal Puech and Maria Isabel Pintor-monroy and Hans Van Gorp and Guillaume Fleury and Ruo Xi and Haowei Huang and Elke Debroye and Dmitry Chernyshov and Bin Chen and Mingyang Wei and Yi Hou and Robert Gehlhaar and Jan Genoe and Steven De Feyter and Sven M J Rogge},
+  pages  = {1-23},
+  title  = {An embedded interfacial network stabilizes inorganic halide perovskite}
+}
+
+@article{Mazumdar2021,
+  abstract = {Inorganic–organic metal halide perovskite light harvester-based perovskite solar cells (PSCs) have come to the limelight of solar cell research due to their rapid growth in efficiency. At present, stability and reliability are challenging aspects concerning the Si-based or thin film-based commercial devices. Commercialization of perovskite solar cells remains elusive due to the lack of stability of these devices under real operational conditions, especially for longer duration use. A large number of researchers have been engaged in an ardent effort to improve the stability of perovskite solar cells. Understanding the degradation mechanisms has been the primary importance before exploring the remedies for degradation. In this review, a methodical understanding of various degradation mechanisms of perovskites and perovskite solar cells is presented followed by a discussion on different steps taken to overcome the stability issues. Recent insights on degradation mechanisms are discussed. Various approaches of stability enhancement are reviewed with an emphasis on reports that complied with the operational standard for practical application in a commercial solar module. The operational stability standard enacted by the International Electrotechnical Commission is especially discussed with reports that met the requirements or showed excellent results, which is the most important criterion to evaluate a device’s actual prospect to be utilized for practical applications in commercial solar modules. An overall understanding of degradation pathways in perovskites and perovskite solar cells and steps taken to overcome those with references including state-of-the-art devices with promising operational stability can be gained from this review.},
+  author   = {Sayantan Mazumdar and Ying Zhao and Xiaodan Zhang},
+  doi      = {10.3389/felec.2021.712785},
+  issue    = {August},
+  journal  = {Frontiers in Electronics},
+  pages    = {1-34},
+  title    = {Stability of Perovskite Solar Cells: Degradation Mechanisms and Remedies},
+  volume   = {2},
+  year     = {2021}
+}
+
+@article{Korbel2018,
+  abstract  = {Hybrid perovskites, such as methylammonium lead iodide, have revolutionized research on solar cells in the past few years. Well known instability and toxicity issues restrain however the large-scale application of these perovskites in commercial photovoltaic technology. It is therefore the most urgent task to find a way to chemically stabilize these and other lead-free perovskites, preserving at the same time their excellent absorption and charge-transport properties. The obvious route to follow is chemical substitution. In this work we screen the periodic table of elements for hybrid organic-inorganic halide perovskites, using high-throughput density-functional theory calculations. We consider compounds with the composition A+B2+X3-, where A is a molecular organic cation, X is a halogen, and B is a divalent element. For the molecular cation, we vary the molecule size from sulfonium (H3S, very small) to tert-butylammonium (C4NH12, very large). All thermodynamically stable hybrid perovskites are then further characterized by calculating their band gaps and effective masses, to identify the most promising candidates for further experimental and theoretical characterization. We find that the substitution of the organic molecule is the most promising way to enhance thermodynamic stability, while there is no optimal replacement for lead or Sn, unless one considers partial substitution or alloying.},
+  author    = {Sabine Körbel and Miguel A.L. Marques and Silvana Botti},
+  doi       = {10.1039/c7ta08992a},
+  issn      = {20507496},
+  issue     = {15},
+  journal   = {Journal of Materials Chemistry A},
+  month     = {4},
+  pages     = {6463-6475},
+  publisher = {The Royal Society of Chemistry},
+  title     = {Stable hybrid organic-inorganic halide perovskites for photovoltaics from: Ab initio high-throughput calculations},
+  volume    = {6},
+  url       = {https://pubs.rsc.org/en/content/articlehtml/2018/ta/c7ta08992a https://pubs.rsc.org/en/content/articlelanding/2018/ta/c7ta08992a},
+  year      = {2018}
+}
+
+@article{Lemke2019,
+  abstract  = {Molecular simulation is one example where large amounts of high-dimensional (high-d) data are generated. To extract useful information, e.g., about relevant states and important conformational transitions, a form of dimensionality reduction is required. Dimensionality reduction algorithms differ in their ability to efficiently project large amounts of data to an informative low-dimensional (low-d) representation and the way the low and high-d representations are linked. We propose a dimensionality reduction algorithm called EncoderMap that is based on a neural network autoencoder in combination with a nonlinear distance metric. A key advantage of this method is that it establishes a functional link from the high-d to the low-d representation and vice versa. This allows us not only to efficiently project data points to the low-d representation but also to generate high-d representatives for any point in the low-d map. The potential of the algorithm is demonstrated for molecular simulation data of a small, highly flexible peptide as well as for folding simulations of the 20-residue Trp-cage protein. We demonstrate that the algorithm is able to efficiently project the ensemble of high-d structures to a low-d map where major states can be identified and important conformational transitions are revealed. We also show that molecular conformations can be generated for any point or any connecting line between points on the low-d map. This ability of inverse mapping from the low-d to the high-d representation is particularly relevant for the use in algorithms that enhance the exploration of conformational space or the sampling of transitions between conformational states.},
+  author    = {Tobias Lemke and Christine Peter},
+  doi       = {10.1021/ACS.JCTC.8B00975/SUPPL_FILE/CT8B00975_SI_005.MPG},
+  issn      = {15499626},
+  issue     = {2},
+  journal   = {Journal of Chemical Theory and Computation},
+  month     = {2},
+  pages     = {1209-1215},
+  pmid      = {30632745},
+  publisher = {American Chemical Society},
+  title     = {EncoderMap: Dimensionality Reduction and Generation of Molecule Conformations},
+  volume    = {15},
+  url       = {https://pubs.acs.org/doi/abs/10.1021/acs.jctc.8b00975},
+  year      = {2019}
+}
+
+@article{Jung2019,
+  abstract = {Exascale computing holds great opportunities for molecular dynamics (MD)
+              simulations. However, to take full advantage of the new possibilities, we must
+              learn how to focus computational power on the discovery of complex molecular
+              mechanisms, and how to extract them from enormous amounts of data. Both aspects
+              still rely heavily on human experts, which becomes a serious bottleneck when a
+              large number of parallel simulations have to be orchestrated to take full
+              advantage of the available computing power. Here, we use artificial
+              intelligence (AI) both to guide the sampling and to extract the relevant
+              mechanistic information. We combine advanced sampling schemes with statistical
+              inference, artificial neural networks, and deep learning to discover molecular
+              mechanisms from MD simulations. Our framework adaptively and autonomously
+              initializes simulations and learns the sampled mechanism, and is thus suitable
+              for massively parallel computing architectures. We propose practical solutions
+              to make the neural networks interpretable, as illustrated in applications to
+              molecular systems.},
+  author   = {Hendrik Jung and Roberto Covino and Gerhard Hummer},
+  isbn     = {1901.04595v1},
+  month    = {1},
+  title    = {Artificial Intelligence Assists Discovery of Reaction Coordinates and Mechanisms from Molecular Dynamics Simulations},
+  url      = {https://arxiv.org/abs/1901.04595v1},
+  year     = {2019}
+}
+
+@article{Wang2020,
+  abstract  = {Molecular dynamics (MD) has become a powerful tool for studying biophysical systems, due to increasing computational power and availability of software. Although MD has made many contributions to better understanding these complex biophysical systems, there remain methodological difficulties to be surmounted. First, how to make the deluge of data generated in running even a microsecond long MD simulation human comprehensible. Second, how to efficiently sample the underlying free energy surface and kinetics. In this short perspective, we summarize machine learning based ideas that are solving both of these limitations, with a focus on their key theoretical underpinnings and remaining challenges.},
+  author    = {Yihang Wang and João Marcelo Lamim Ribeiro and Pratyush Tiwary},
+  doi       = {10.1016/J.SBI.2019.12.016},
+  issn      = {0959-440X},
+  journal   = {Current Opinion in Structural Biology},
+  month     = {4},
+  pages     = {139-145},
+  pmid      = {31972477},
+  publisher = {Elsevier Current Trends},
+  title     = {Machine learning approaches for analyzing and enhancing molecular dynamics simulations},
+  volume    = {61},
+  year      = {2020}
+}
+
+@article{Zhang2018,
+  abstract = {Collective variable (CV) or order parameter based enhanced sampling algorithms have achieved great success due to their ability to efficiently explore the rough potential energy landscapes of complex systems. However, the degeneracy of microscopic configurations, originating from the orthogonal space perpendicular to the CVs, is likely to shadow "hidden barriers" and greatly reduce the efficiency of CV-based sampling. Here we demonstrate that systematic machine learning CV, through enhanced sampling, can iteratively lift such degeneracies on the fly. We introduce an active learning scheme that consists of a parametric CV learner based on deep neural network and a CV-based enhanced sampler. Our active enhanced sampling algorithm is capable of identifying the least informative regions based on a historical sample, forming a positive feedback loop between the CV learner and sampler. This approach is able to globally preserve kinetic characteristics by incrementally enhancing both sample completeness and CV quality. Molecular dynamics (MD) simulation is an essential tool to understand the equilibria and kinetics of complex systems and processes, such as protein folding [1], drug binding [2], phase transitions [3], glass states [4,5], etc. Sampling equilibrium states and conformational changes requires the exploration of a "rough" high-dimensional potential energy surface, on which stable configurations are separated by relatively high barriers. This leads to an exponential growth of equilibration time in a MD simulation. To avoid trapping in local minima, various enhanced sampling methods have been proposed to improve the sampling efficiency [6-11]. One family of these methods including umbrella sampling [12], metadynamics [7], temperature accelerated MD [9], etc. forces the exploration of low-probability states via a biasing of the probability distribution of select degrees of freedom. Such degrees of freedom are referred to as collective variables (CVs), which coarse grain the high-dimensional potential energy surface to a low-dimensional free-energy surface (FES). An ideal set of CVs should retain the kinetic characteristics of the system [13-15] on the FES, which requires that the CVs precisely describe the low free-energy regions, especially critical transition paths between minima [15]. Determining a small number of CVs to globally preserve kinetic information is quite challenging, due to the non-uniform intrinsic dimensionalities [16] and nonlinear local structures of these regions [17]. One natural approach for CV selection, which has achieved some success [18-20], seeks to empirically construct CVs based on physical intuition and structure characteristics. Other efforts have been focused on determining or training CVs through dimension reduction on simulation data [21-26]. The resulting CVs from both approaches are often kept static throughout the entire enhanced sampling process. For complex chemical systems, the static form of the CVs usually leads to problematic degeneracies. In the space orthogonal to the CVs [27], potential energy barriers, also known as "hidden barriers," can separate important stable configurations. The transitions over hidden barriers that are shadowed by the chosen CVs are not observable on the FES. This phenomenon is called "orthogonal space degen-eracy" (or "degeneracy" in the following content). When exploring the CV space, enhanced sampling algorithms only enhance the sampling of barrier crossing on the FES, while leaving transitions over hidden barriers unaffected. Therefore, enhanced sampling algorithms rely on CV selection methods to provide a set of less-degenerate CVs. Theoretically, the set of less-degenerate CVs can be constructed given either a prior understanding of the system [19,28,29] or a complete sampling of the system [22-26]. Yet in practice, it is very difficult to obtain this information in a finite amount of simulation time. Hence, to break degeneracy in orthogonal space, it is vital to establish a systematic and on-the-fly approach to CV construction for enhanced sampling algorithms. Before explaining the methodology of active enhanced sampling (AES), it is worthwhile to illustrate orthogonal space degeneracy by alanine dipeptide molecule. As shown in Fig. 1, two Ramachandran dihedral angles ðΦ; ΨÞ are usually considered as proper CVs to map all stable configurations [16] of alanine dipeptide. Figure 1(a) shows four basins (C7 eq , C5, C7 ax , and α 0) on the FES of Φ and Ψ.},
+  author   = {Jing Zhang and Ming Chen},
+  doi      = {10.1103/PhysRevLett.121.010601},
+  journal  = {PHYSICAL REVIEW LETTERS},
+  keywords = {doi:10.1103/PhysRevLett.121.010601 url:https://doi.org/10.1103/PhysRevLett.121.010601},
+  pages    = {10601},
+  title    = {Unfolding Hidden Barriers by Active Enhanced Sampling},
+  volume   = {121},
+  year     = {2018}
+}
+
+@article{Hernandez2017,
+  abstract  = {Often the analysis of time-dependent chemical and biophysical systems produces high-dimensional time-series data for which it can be difficult to interpret which individual features are most salient. While recent work from our group and others has demonstrated the utility of time-lagged co-variate models to study such systems, linearity assumptions can limit the compression of inherently nonlinear dynamics into just a few characteristic components. Recent work in the field of deep learning has led to the development of variational autoencoders (VAE), which are able to compress complex datasets into simpler manifolds. We present the use of a time-lagged VAE, or variational dynamics encoder (VDE), to reduce complex, nonlinear processes to a single embedding with high fidelity to the underlying dynamics. We demonstrate how the VDE is able to capture nontrivial dynamics in a variety of examples, including Brownian dynamics and atomistic protein folding. Additionally, we demonstrate a method for analyzing the VDE model, inspired by saliency mapping, to determine what features are selected by the VDE model to describe dynamics. The VDE presents an important step in applying techniques from deep learning to more accurately model and interpret complex biophysics.},
+  author    = {Carlos X. Hernández and Hannah K. Wayment-Steele and Mohammad M. Sultan and Brooke E. Husic and Vijay S. Pande},
+  doi       = {10.1103/PhysRevE.97.062412},
+  issue     = {6},
+  journal   = {Physical Review E},
+  month     = {11},
+  publisher = {American Physical Society},
+  title     = {Variational Encoding of Complex Dynamics},
+  volume    = {97},
+  url       = {http://arxiv.org/abs/1711.08576 http://dx.doi.org/10.1103/PhysRevE.97.062412},
+  year      = {2017}
+}
+
+
+@article{Wehmeyer2018,
+  abstract  = {Inspired by the success of deep learning techniques in the physical and chemical sciences, we apply a modification of an autoencoder type deep neural network to the task of dimension reduction of molecular dynamics data. We can show that our time-lagged autoencoder reliably finds low-dimensional embeddings for high-dimensional feature spaces which capture the slow dynamics of the underlying stochastic processes - beyond the capabilities of linear dimension reduction techniques.},
+  author    = {Christoph Wehmeyer and Frank Noé},
+  doi       = {10.1063/1.5011399},
+  issn      = {00219606},
+  issue     = {24},
+  journal   = {Journal of Chemical Physics},
+  month     = {6},
+  pmid      = {29960344},
+  publisher = {American Institute of Physics Inc.},
+  title     = {Time-lagged autoencoders: Deep learning of slow collective variables for molecular kinetics},
+  volume    = {148},
+  year      = {2018}
+}
+
+@article{Tiwary2016,
+  abstract  = {In modern-day simulations of many-body systems, much of the computational complexity is shifted to the identification of slowly changing molecular order parameters called collective variables (CVs) or reaction coordinates. A vast array of enhanced-sampling methods are based on the identification and biasing of these low-dimensional order parameters, whose fluctuations are important in driving rare events of interest. Here, we describe a new algorithm for finding optimal low-dimensional CVs for use in enhanced-sampling biasing methods like umbrella sampling, metadynamics, and related methods, when limited prior static and dynamic information is known about the system, and a much larger set of candidate CVs is specified. The algorithm involves estimating the best combination of these candidate CVs, as quantified by a maximum path entropy estimate of the spectral gap for dynamics viewed as a function of that CV. The algorithm is called spectral gap optimization of order parameters (SGOOP). Through multiple practical examples, we show how this postprocessing procedure can lead to optimization of CV and several orders of magnitude improvement in the convergence of the free energy calculated through metadynamics, essentially giving the ability to extract useful information even from unsuccessful metadynamics runs.},
+  author    = {Pratyush Tiwary and B. J. Berne},
+  doi       = {10.1073/PNAS.1600917113},
+  issn      = {1091-6490},
+  issue     = {11},
+  journal   = {Proceedings of the National Academy of Sciences of the United States of America},
+  keywords  = {Algorithms*,B J Berne,Entropy,Extramural,MEDLINE,Models,Molecular,Molecular Dynamics Simulation,N.I.H.,NCBI,NIH,NLM,National Center for Biotechnology Information,National Institutes of Health,National Library of Medicine,PMC4801247,Peptides / chemistry,Pratyush Tiwary,PubMed Abstract,Research Support,Theoretical*,doi:10.1073/pnas.1600917113,pmid:26929365},
+  month     = {3},
+  pages     = {2839-2844},
+  pmid      = {26929365},
+  publisher = {Proc Natl Acad Sci U S A},
+  title     = {Spectral gap optimization of order parameters for sampling complex molecular systems},
+  volume    = {113},
+  url       = {https://pubmed.ncbi.nlm.nih.gov/26929365/},
+  year      = {2016}
+}
+
+
+@article{Tsai2020,
+  abstract = {Recurrent neural networks (RNNs) have led to breakthroughs in natural language processing and speech recognition, wherein hundreds of millions of people use such tools on a daily basis through smartphones, email servers and other avenues. In this work, we show such RNNs, specifically Long Short-Term Memory (LSTM) neural networks can also be applied to capturing the temporal evolution of typical trajectories arising in chemical and biological physics. Specifically, we use a character-level language model based on LSTM. This learns a probabilistic model from 1-dimensional stochastic trajectories generated from molecular dynamics simulations of a higher dimensional system. We show that the model can not only capture the Boltzmann statistics of the system but it also reproduce kinetics at a large spectrum of timescales. We demonstrate how the embedding layer, introduced originally for representing the contextual meaning of words or characters, exhibits here a nontrivial connectivity between different metastable states in the underlying physical system. We demonstrate the reliability of our model and interpretations through different benchmark systems and a single molecule force spectroscopy trajectory for multi-state riboswitch. We anticipate that our work represents a stepping stone in the understanding and use of RNNs for modeling and predicting dynamics of complex stochastic molecular systems.},
+  author   = {Sun-Ting Tsai and En-Jui Kuo and Pratyush Tiwary},
+  title    = {Learning Molecular Dynamics with Simple Language Model built upon Long Short-Term Memory Neural Network}
+}
+
+@article{Shamsi2018,
+  abstract = {One of the key limitations of Molecular Dynamics (MD) simulations is the computational intractability of sampling protein conformational landscapes associated with either large system size or long time scales. To overcome this bottleneck, we present the REinforcement learning based Adaptive samPling (REAP) algorithm that aims to efficiently sample conformational space by learning the relative importance of each order parameter as it samples the landscape. To achieve this, the algorithm uses concepts from the field of reinforcement learning, a subset of machine learning, which rewards sampling along important degrees of freedom and disregards others that do not facilitate exploration or exploitation. We demonstrate the effectiveness of REAP by comparing the sampling to long continuous MD simulations and least-counts adaptive sampling on two model landscapes (L-shaped and circular) and realistic systems such as alanine dipeptide and Src kinase. In all four systems, the REAP algorithm consistently demonstrates its ability to explore conformational space faster than the other two methods when comparing the expected values of the landscape discovered for a given amount of time. The key advantage of REAP is on-the-fly estimation of the importance of collective variables, which makes it particularly useful for systems with limited structural information. ■ INTRODUCTION Molecular dynamics (MD) simulations have rapidly advanced into an invaluable tool for understanding the structure− function relationship in biological molecules. 1−4 Although they aid our understanding of intricate biomolecular dynamics, the bottleneck lies in the amount of computational resources available to the researcher. In common practice, running MD simulations on nonspecialized computing hardware allows for nanoseconds worth of data per day. 1 The reality is that the salient protein conformational changes can occur at millisecond and even longer timescales; a six or greater order of magnitude difference in terms of nanoseconds, 2 which can cost up to years worth of simulation time. Examples include the transport cycle for membrane transporter proteins, 5,6 protein folding, 4,7−9 and large-scale conformational changes involved in cell signaling. 10−17 A number of enhanced sampling methods have emerged to address this computational drawback of conventional simulations. Two general classes exist among these methods; one class requires the specification of order parameters, i.e., a function of system degrees of freedom that guides the simulation to reach the desired end state by enhancing sampling along the order parameter. This class can further be broken down into two subclasses, either by biasing the underlying potential along the order parameter (e.g., steered MD, 18 metadynamics, 19 temperature-accelerated MD, 20 umbrella sampling 21) or performing unbiased adaptive sampling using the order parameters as a metric. 22 The second class of techniques encourages exploration of the conforma-tional landscape in all directions by modifying the overall Hamiltonian (e.g., accelerated MD, 23 replica exchange MD, 24 or weighted-ensemble simulations 25). Depending on the scientific goal, the usefulness of each class of techniques will differ. Several techniques exist that combine the ideas from these methods to achieve enhanced sampling efficiency. For example, Preto and Clementi introduced a new method called Extended DM-d-MD 26 that enhances the sampling of MD trajectories within areas that are typically difficult to sample such as the barriers between metastable regions. It proceeds by iteratively restarting simulations so as to obtain a uniform distribution along the first two diffusion coordinates. Since the diffusion coordinates are obtained from postprocessed simulation data, a priori order parameter information is not needed to perform the method. Similarly, the iMapD 27 method attempts to efficiently explore the free energy surface of a system using an adaptive exploration strategy; it iteratively starts new simulations at the boundary points of a lower dimensional space (in their case, diffusion coordinates) and outwardly explores the space until new metastable configurations are detected. Another method, named SGOOP, 28 attempts to find the best linear combination of a preselected set of order parameters using maximum path entropy estimates. This newly generated coordinate can then be used to sample along using one of the enhanced sampling method mentioned above.},
+  author   = {Zahra Shamsi and Kevin J Cheng and Diwakar Shukla},
+  doi      = {10.1021/acs.jpcb.8b06521},
+  journal  = {J. Phys. Chem. B},
+  pages    = {8395},
+  title    = {Reinforcement Learning Based Adaptive Sampling: REAPing Rewards by Exploring Protein Conformational Landscapes},
+  volume   = {122},
+  url      = {https://pubs.acs.org/sharingguidelines},
+  year     = {2018}
+}
+
+@article{Shoberl2019,
+  abstract  = {Extending spatio-temporal scale limitations of models for complex atomistic systems considered in biochemistry and materials science necessitates the development of enhanced sampling methods. The potential acceleration in exploring the configurational space by enhanced sampling methods depends on the choice of collective variables (CVs). In this work, we formulate the discovery of CVs as a Bayesian inference problem and consider the CVs as hidden generators of the full-atomistic trajectory. The ability to generate samples of the fine-scale atomistic configurations using limited training data allows us to compute estimates of observables as well as our probabilistic confidence on them. The methodology is based on emerging methodological advances in machine learning and variational inference. The discovered CVs are related to physicochemical properties which are essential for understanding mechanisms especially in unexplored complex systems. We provide a quantitative assessment of the CVs in terms of their predictive ability for alanine dipeptide (ALA-2) and ALA-15 peptide.},
+  author    = {Markus Schöberl and Nicholas Zabaras and Phaedon Stelios Koutsourelakis},
+  doi       = {10.1063/1.5058063},
+  issn      = {00219606},
+  issue     = {2},
+  journal   = {Journal of Chemical Physics},
+  month     = {1},
+  pmid      = {30646713},
+  publisher = {American Institute of Physics Inc.},
+  title     = {Predictive collective variable discovery with deep Bayesian models},
+  volume    = {150},
+  year      = {2019}
+}
+
+@article{Sultan2018,
+  abstract = {Variational autoencoder frameworks have demonstrated success in reducing complex nonlinear dynamics in molecular simulation to a single nonlinear embedding. In this work, we illustrate how this nonlinear latent embedding can be used as a collective variable for enhanced sampling and present a simple modification that allows us to rapidly perform sampling in multiple related systems. We first demonstrate our method is able to describe the effects of force field changes in capped alanine dipeptide after learning about a model using AMBER99. We further provide a simple extension to variational dynamics encoders that allows the model to be trained in a more efficient manner on larger systems by encoding the outputs of a linear transformation using time-structure based independent component analysis (tICA). Using this technique, we show how such a model trained for one protein, the WW domain, can efficiently be transferred to perform enhanced sampling on a related mutant protein, the GTT mutation. This method shows promise for its ability to rapidly sample related systems using a single transferable collective variable, enabling us to probe the effects of variation in increasingly large systems of biophysical interest. ■ INTRODUCTION Efficient sampling of protein dynamics remains an unsolved problem in computational biophysics. Even with advances in GPU hardware, custom chips, and algorithms, 1,2 most molecular dynamics (MD) simulation studies are limited to understanding the atomistic dynamics of one protein system at a time. However, for MD to be predictive in guiding experiments, we require methods capable of describing the effects of perturbations to a system. 3 A perturbation can be very broadly defined and could be a mutation to a protein sequence, a post-translational modification, ionic concentration, solvent type, protonation state, or chemical potential, or for better understanding simulation parameters, a change in force field (FF). We would like to predict via simulation how these perturbations affect protein dynamics; for instance, characterizing how a protein's folded state is stabilized or an intermediate is trapped. If the phase space of a perturbed system is similar to that of an already-sampled system, characterizing the perturbed system should be far cheaper than running and analyzing a new set of simulations from scratch. 4 If we have sampled a system via unbiased simulation in one condition, we can leverage information about the phase space to accelerate simulations of the system in other conditions. If we can learn information about a slow coordinate in the original system, we can use this slow coordinate in enhanced sampling methods to characterize the perturbed system. Enhanced sampling on a slow coordinate that is conserved between system conditions may be able to give unbiased exploration along faster coordinates, accelerating simulation of the entire phase space across conditions. We note this type of study of a system is complementary to existing postsimulation analysis methods that combine information from multiple thermodynamic states (WHAM, bin-less WHAM, MBAR, DHAM, xTRAM, TRAM, etc.), as it is using information at one state to directly simulate unobserved states. Enhanced sampling methods aim to use prior information about a system to accelerate simulation. In Metadynamics, 5−9 a commonly used enhanced sampling method and the focus of this work, time-dependent Gaussians are deposited along user-selected collective variables (CVs). This biases the system away from regions of phase space that have already been visited. However, the selection of which CV to use is critical for meaningfully sampling the system. A choice of poor CVs, even in the simplest of cases, leads to hysteresis such that the time scales required for convergence approach, or even exceed, unbiased sampling time scales. 10 To address this problem of CV choice, we recently showed 3,11 that time-structure based independent component analysis (tICA), a relatively recent advance in the Markov state},
+  author   = {Mohammad M Sultan and Hannah K Wayment-Steele and Vijay S Pande},
+  doi      = {10.1021/acs.jctc.8b00025},
+  journal  = {J. Chem. Theory Comput},
+  pages    = {1887-1894},
+  title    = {Transferable Neural Networks for Enhanced Sampling of Protein Dynamics},
+  volume   = {14},
+  url      = {https://pubs.acs.org/sharingguidelines},
+  year     = {2018}
+}
+
+@article{vanDerMaarten2008,
+  abstract = {We present a new technique called "t-SNE" that visualizes high-dimensional data by giving each datapoint a location in a two or three-dimensional map. The technique is a variation of Stochastic Neighbor Embedding (Hinton and Roweis, 2002) that is much easier to optimize, and produces significantly better visualizations by reducing the tendency to crowd points together in the center of the map. t-SNE is better than existing techniques at creating a single map that reveals structure at many different scales. This is particularly important for high-dimensional data that lie on several different, but related, low-dimensional manifolds, such as images of objects from multiple classes seen from multiple viewpoints. For visualizing the structure of very large data sets, we show how t-SNE can use random walks on neighborhood graphs to allow the implicit structure of all of the data to influence the way in which a subset of the data is displayed. We illustrate the performance of t-SNE on a wide variety of data sets and compare it with many other non-parametric visualization techniques, including Sammon mapping, Isomap, and Locally Linear Embedding. The visualiza-tions produced by t-SNE are significantly better than those produced by the other techniques on almost all of the data sets.},
+  author   = {Laurens Van Der Maaten and Geoffrey Hinton},
+  journal  = {Journal of Machine Learning Research},
+  keywords = {dimensionality reduction,embedding algorithms,manifold learning,multidimensional scaling,visualization},
+  pages    = {2579-2605},
+  title    = {Visualizing Data using t-SNE},
+  volume   = {9},
+  year     = {2008}
+}
+
+@article{McInnes2018,
+  abstract = {UMAP (Uniform Manifold Approximation and Projection) is a novel manifold
+              learning technique for dimension reduction. UMAP is constructed from a
+              theoretical framework based in Riemannian geometry and algebraic topology. The
+              result is a practical scalable algorithm that applies to real world data. The
+              UMAP algorithm is competitive with t-SNE for visualization quality, and
+              arguably preserves more of the global structure with superior run time
+              performance. Furthermore, UMAP has no computational restrictions on embedding
+              dimension, making it viable as a general purpose dimension reduction technique
+              for machine learning.},
+  author   = {Leland McInnes and John Healy and James Melville},
+  month    = {2},
+  title    = {UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction},
+  url      = {https://arxiv.org/abs/1802.03426v3},
+  year     = {2018}
+}
+
+@article{Pande2010,
+  abstract = {Simulating protein folding has been a challenging problem for decades due to the long timescales involved (compared with what is possible to simulate) and the challenges of gaining insight from the complex nature of the resulting simulation data. Markov State Models (MSMs) present a means to tackle both of these challenges, yielding simulations on experimentally relevant timescales, statistical significance, and coarse grained representations that are readily humanly understandable. Here, we review this method with the intended audience of non-experts, in order to introduce the method to a broader audience. We review the motivations, methods, and caveats of MSMs, as well as some recent highlights of applications of the method. We conclude by discussing how this approach is part of a paradigm shift in how one uses simulations, away from anecdotal single-trajectory approaches to a more comprehensive statistical approach.},
+  author   = {Vijay S Pande and Kyle Beauchamp and Gregory R Bowman},
+  doi      = {10.1016/j.ymeth.2010.06.002},
+  title    = {Everything you wanted to know about Markov State Models but were afraid to ask}
+}
+
+
+@article{Zhang2019,
+  abstract  = {Boosting transitions of rare events is critical to simulations of chemical and biophysical dynamic systems in order to close the time scale gaps between theoretical modeling and experiments. We present a novel approach, called targeted adversarial learning optimized sampling (TALOS), to modify the potential energy surface in order to drive the system to a user-defined target distribution where the free-energy barrier is lowered. Combining statistical mechanics and generative learning, TALOS formulates a competing game between a sampling engine and a virtual discriminator, enables unsupervised construction of bias potentials, and seeks for an optimal transport plan that transforms the system into a target. Through multiple experiments, we show that on-the-fly training of TALOS benefits from the state-of-art optimization techniques in deep learning and thus is efficient, robust, and interpretable. TALOS is also closely connected to the actor-critic reinforcement learning and hence leads to a new way of flexibly manipulating the many-body Hamiltonian systems.},
+  author    = {Jun Zhang and Yi Isaac Yang and Frank Noé},
+  doi       = {10.1021/ACS.JPCLETT.9B02173/SUPPL_FILE/JZ9B02173_SI_001.PDF},
+  issn      = {19487185},
+  issue     = {19},
+  journal   = {Journal of Physical Chemistry Letters},
+  month     = {10},
+  pages     = {5791-5797},
+  pmid      = {31522495},
+  publisher = {American Chemical Society},
+  title     = {Targeted Adversarial Learning Optimized Sampling},
+  volume    = {10},
+  url       = {https://pubs.acs.org/doi/abs/10.1021/acs.jpclett.9b02173},
+  year      = {2019}
+}
+
+@article{kohler2019,
+  abstract = {Flows are exact-likelihood generative neural networks that transform samples from a simple prior distribution to the samples of the probability distribution of interest. Boltzmann Generators (BG) combine flows and statistical mechanics to sample equilibrium states of strongly interacting many-body systems such as proteins with 1000 atoms. In order to scale and generalize these results, it is essential that the natural symmetries of the probability density-in physics defined by the invariances of the energy function-are built into the flow. Here we develop theoretical tools for constructing such equivariant flows and demonstrate that a BG that is equivariant with respect to rotations and particle permutations can generalize to sampling nontrivially new configurations where a nonequivariant BG cannot.},
+  author   = {Jonas Köhler and Leon Klein and Frank Noé},
+  title    = {Equivariant Flows: sampling configurations for multi-body systems with symmetric energies}
+}
+
+@article{Dibak2021,
+  abstract = {Boltzmann generators approach the sampling problem in many-body physics by combining a normalizing flow and a statistical reweighting method to generate samples of a physical system's equilibrium density. The equilibrium distribution is usually defined by an energy function and a thermodynamic state. Here we propose temperature-steerable flows (TSF) which are able to generate a family of probability densities parametrized by a choosable temperature parameter. TSFs can be embedded in a generalized ensemble sampling frameworks to sample a physical system across thermodynamic states.},
+  author   = {Manuel Dibak and Leon Klein and Frank Noé},
+  title    = {Temperature Steerable Flows and Boltzmann Generators}
+}
+
+
+@article{Bozkurt2020,
+  abstract = {Extracting insight from the enormous quantity of data generated from molecular simulationsrequires the identification of a small number of collective variables whose correspondinglow-dimensional free-energy landscape retains the essential features of the underlying system.Data-driventechniquesprovide a systematic routeto constructing this landscape, without the needfor extensivea prioriintuition into the relevant driving forces. In particular, autoencoders arepowerful tools for dimensionality reduction, as they naturally force an information bottleneck and,thereby, a low-dimensional embedding of the essential features. While variational autoencodersensure continuity of the embedding by assuming a unimodal Gaussian prior, this is at odds withthe multi-basin free-energy landscapes that typically arise from the identification of meaningfulcollective variables. In this work, we incorporate this physical intuition into the prior by employinga Gaussian mixture variational autoencoder (GMVAE), which encourages the separation ofmetastable states within the embedding. The GMVAE performs dimensionality reduction andclustering within a single unified framework, and is capable of identifying the inherentdimensionality of the input data, in terms of the number of Gaussians required to categorize thedata. We illustrate our approach on two toy models, alanine dipeptide, and a challengingdisordered peptide ensemble, demonstrating the enhanced clustering effect of the GMVAE priorcompared to standard VAEs. The resulting embeddings appear to be promising representations forconstructing Markov state models, highlighting the transferability of the dimensionality reductionfrom static equilibrium properties to dynamics.},
+  author   = {Yasemin Bozkurt Varolgünes and Tristan Bereau and Joseph F Rudzinski},
+  doi      = {10.1088/2632-2153/ab80b7},
+  journal  = {Machine Learning: Science and Technology},
+  title    = {Interpretable embeddings from molecular simulations using Gaussian mixture variational autoencoders},
+  url      = {https://doi.org/10.1088/2632-2153/ab80b7},
+  year     = {2020}
+}
+
+
+@article{Dellago1998,
+  abstract = {We have developed a method to study transition pathways for rare events in complex systems. The method can be used to determine rate constants for transitions between stable states by turning the calculation of reactive flux correlation functions into the computation of an isomorphic reversible work. In contrast to previous dynamical approaches, the method relies neither on prior knowledge nor on explicit specification of transition states. Rather, it provides an importance sampling from which transition states can be characterized statistically. A simple model is analyzed to illustrate the methodology.},
+  author   = {Christoph Dellago and Peter G Bolhuis and S Csajka and David Chandler},
+  title    = {Transition path sampling and the calculation of rate constants},
+  year     = {1998}
+}
+
+@article{Wu2019,
+  abstract = {We propose a deep generative Markov State Model (DeepGenMSM) learning framework for inference of metastable dynamical systems and prediction of tra-jectories. After unsupervised training on time series data, the model contains (i) a probabilistic encoder that maps from high-dimensional configuration space to a small-sized vector indicating the membership to metastable (long-lived) states, (ii) a Markov chain that governs the transitions between metastable states and facilitates analysis of the long-time dynamics, and (iii) a generative part that samples the conditional distribution of configurations in the next time step. The model can be operated in a recursive fashion to generate trajectories to predict the system evolution from a defined starting state and propose new configurations. The DeepGenMSM is demonstrated to provide accurate estimates of the long-time ki-netics and generate valid distributions for molecular dynamics (MD) benchmark systems. Remarkably, we show that DeepGenMSMs are able to make long time-steps in molecular configuration space and generate physically realistic structures in regions that were not seen in training data.},
+  author   = {Hao Wu and Andreas Mardt and Luca Pasquali and Frank Noé},
+  title    = {Deep Generative Markov State Models}
+}
+
+@article{Wang2021,
+  abstract = {The ability to make sense of the massive amounts of high-dimensional data generated from molecular dynamics (MD) simulations is heavily dependent on the knowledge of a low dimensional manifold (parameterized by a reaction coordinate or RC) that typically distinguishes between relevant metastable states and which captures the relevant slow dynamics of interest. Methods based on machine learning and artificial intelligence have been proposed over the years to deal with learning such low-dimensional manifolds, but they are often criticized for a disconnect from more traditional and physically interpretable approaches. To deal with such concerns, in this work, we propose a deep learning based State Predictive Information Bottleneck (SPIB) approach to learn the RC from high dimensional molecular simulation trajectories. We demonstrate analytically and numerically how the RC learnt in this approach is deeply connected to the committor in chemical physics, and can be used to accurately identify transition states. A crucial hyperparameter in this approach is the time-delay, or how far into the future the algorithm should make predictions about. Through careful comparisons for benchmark systems, we demonstrate that this hyperparameter choice gives useful control over how coarse-grained we want the metastable state classification of the system to be. We thus believe that this work represents a step forward in systematic application of deep learning based ideas to molecular simulations in a way that bridges the gap between artificial intelligence and traditional chemical physics.},
+  author   = {Dedi Wang and Pratyush Tiwary},
+  title    = {State Predictive Information Bottleneck},
+  year     = {2021}
+}
+
+@article{Tenenbaum1995,
+  abstract = {23; right 36, 13, and 27); superior frontal gyrus (left 9, 31, and 45; right 17, 35, and 37). 17. Although the improvement in WM performance with cholinergic enhancement was a nonsignificant trend in the current study (P 0.07), in a previous study (9) with a larger sample (n 13) the effect was highly significant (P 0.001). In the current study, we analyzed RT data for six of our seven subjects because the behavioral data for one subject were unavailable due to a computer failure. The difference in the significance of the two findings is simply a result of the difference in sample sizes. A power analysis shows that the size of the RT difference and variability in the current sample would yield a significant result (P 0.01) with a sample size of 13. During the memory trials, mean RT was 1180 ms during placebo and 1119 ms during physostigmine. During the control trials, mean RT was 735 ms during placebo and 709 ms during physostigmine, a difference that did not approach significance (P 0.24), suggesting that the effect of cholinergic enhancement on WM performance is not due to a nonspecific increase in arousal. 18. Matched-pair t tests (two-tailed) were used to test the significance of drug-related changes in the volume of regions of interest that showed significant response contrasts. 19. H. Sato, Y. Hata, H. Masui, T. Tsumoto, J. Neuro-physiol. 55, 765 (1987).},
+  author   = {Joshua B Tenenbaum and Vin de Silva and John C Langford},
+  journal  = {Philos. Trans. R. Soc. London Ser. B},
+  pages    = {1777},
+  title    = {A Global Geometric Framework for Nonlinear Dimensionality Reduction},
+  volume   = {67},
+  url      = {www.sciencemag.org},
+  year     = {1995}
+}
+
+@article{Preto2014,
+  abstract = {The reaction pathways characterizing macromolecular systems of biological interest are associated with high free energy barriers. Resorting to the standard all-atom molecular dynamics (MD) to explore such critical regions may be inappropriate as the time needed to observe the relevant transitions can be remarkably long. In this paper, we present a new method called Extended Diffusion-Map-directed Molecular Dynamics (extended DM-d-MD) used to enhance the sampling of MD trajectories in such a way as to rapidly cover all important regions of the free energy landscape including deep metastable states and critical transition paths. Moreover, extended DM-d-MD was combined with a reweighting scheme enabling to save on-the-fly information about the Boltzmann distribution. Our algorithm was successfully applied to two systems, alanine dipeptide and alanine-12. Due to the enhanced sampling, the Boltzmann distribution is recovered much faster than in plain MD simulations. For alanine dipeptide, we report a speedup of one order of magnitude with respect to plain MD simulations. For alanine-12, our algorithm allows us to highlight all important unfolded basins in several days of computation when one single misfolded event is barely observable within the same amount of computational time by plain MD simulations. Our method is reaction coordinate free, shows little dependence on the a priori knowledge of the system, and can be implemented in such a way that the biased steps are not computationally expensive with respect to MD simulations thus making our approach well adapted for larger complex systems from which little information is known. © the Partner Organisations 2014.},
+  author   = {Jordane Preto and Cecilia Clementi},
+  doi      = {10.1039/c3cp54520b},
+  issn     = {14639076},
+  issue    = {36},
+  journal  = {Physical Chemistry Chemical Physics},
+  month    = {8},
+  pages    = {19181-19191},
+  pmid     = {24955434},
+  title    = {Fast recovery of free energy landscapes via diffusion-map-directed molecular dynamics},
+  volume   = {16},
+  year     = {2014}
+}
+
+@article{Chiavazzo2017,
+  abstract  = {We describe and implement a computer-assisted approach for accelerating the exploration of uncharted effective free-energy surfaces (FESs). More generally, the aim is the extraction of coarsegrained, macroscopic information from stochastic or atomistic simulations, such as molecular dynamics (MD). The approach functionally links the MD simulator with nonlinear manifold learning techniques. The added value comes from biasing the simulator toward unexplored phase-space regions by exploiting the smoothness of the gradually revealed intrinsic low-dimensional geometry of the FES.},
+  author    = {Eliodoro Chiavazzo and Roberto Covino and Ronald R. Coifman and C. William Gear and Anastasia S. Georgiou and Gerhard Hummer and Ioannis G. Kevrekidis},
+  doi       = {10.1073/PNAS.1621481114/-/DCSUPPLEMENTAL},
+  issn      = {10916490},
+  issue     = {28},
+  journal   = {Proceedings of the National Academy of Sciences of the United States of America},
+  keywords  = {Enhanced sampling methods,Free-energy surface,Machine learning,Model reduction,Protein folding},
+  month     = {7},
+  pages     = {E5494-E5503},
+  pmid      = {28634293},
+  publisher = {National Academy of Sciences},
+  title     = {Intrinsic map dynamics exploration for uncharted effective free-energy landscapes},
+  volume    = {114},
+  url       = {https://www.pnas.org/content/114/28/E5494 https://www.pnas.org/content/114/28/E5494.abstract},
+  year      = {2017}
+}
+
+@article{Mishne2015,
+  abstract = {Non-linear manifold learning enables high-dimensional data analysis, but requires out-of-sample-extension methods to process new data points. In this paper, we propose a manifold learning algorithm based on deep learning to create an encoder, which maps a high-dimensional dataset and its low-dimensional embedding, and a decoder, which takes the embedded data back to the high-dimensional space. Stacking the encoder and decoder together constructs an autoencoder, which we term a diffusion net, that performs out-of-sample-extension as well as outlier detection. We introduce new neural net constraints for the encoder, which preserves the local geometry of the points, and we prove rates of convergence for the encoder. Also, our approach is efficient in both computational complexity and memory requirements, as opposed to previous methods that require storage of all training points in both the high-dimensional and the low-dimensional spaces to calculate the out-of-sample-extension and the pre-image.},
+  author   = {Gal Mishne and Uri Shaham and Alexander Cloninger and Israel Cohen},
+  title    = {Diffusion Nets},
+  year     = {2015}
+}
+
+@article{Mardt2017,
+  abstract  = {There is an increasing demand for computing the relevant structures, equilibria and long-timescale kinetics of biomolecular processes, such as protein-drug binding, from high-throughput molecular dynamics simulations. Current methods employ transformation of simulated coordinates into structural features, dimension reduction, clustering the dimension-reduced data, and estimation of a Markov state model or related model of the interconversion rates between molecular structures. This handcrafted approach demands a substantial amount of modeling expertise, as poor decisions at any step will lead to large modeling errors. Here we employ the variational approach for Markov processes (VAMP) to develop a deep learning framework for molecular kinetics using neural networks, dubbed VAMPnets. A VAMPnet encodes the entire mapping from molecular coordinates to Markov states, thus combining the whole data processing pipeline in a single end-to-end framework. Our method performs equally or better than state-of-the art Markov modeling methods and provides easily interpretable few-state kinetic models.},
+  author    = {Andreas Mardt and Luca Pasquali and Hao Wu and Frank Noé},
+  doi       = {10.1038/s41467-017-02388-1},
+  issue     = {1},
+  journal   = {Nature Communications},
+  month     = {10},
+  publisher = {Nature Publishing Group},
+  title     = {VAMPnets: Deep learning of molecular kinetics},
+  volume    = {9},
+  url       = {http://arxiv.org/abs/1710.06012 http://dx.doi.org/10.1038/s41467-017-02388-1},
+  year      = {2017}
+}
+
+@article{noe2016,
+  abstract  = {Identification of the main reaction coordinates and building of kinetic models of macromolecular systems require a way to measure distances between molecular configurations that can distinguish slowly interconverting states. Here we define the commute distance that can be shown to be closely related to the expected commute time needed to go from one configuration to the other, and back. A practical merit of this quantity is that it can be easily approximated from molecular dynamics data sets when an approximation of the Markov operator eigenfunctions is available, which can be achieved by the variational approach to approximate eigenfunctions of Markov operators, also called variational approach of conformation dynamics (VAC) or the time-lagged independent component analysis (TICA). The VAC or TICA components can be scaled such that a so-called commute map is obtained in which Euclidean distance corresponds to the commute distance, and thus kinetic models such as Markov state models can be computed based on Euclidean operations, such as standard clustering. In addition, the distance metric gives rise to a quantity we call total kinetic content, which is an excellent score to rank input feature sets and kinetic model quality.},
+  author    = {Frank Noé and Ralf Banisch and Cecilia Clementi},
+  doi       = {10.1021/acs.jctc.6b00762},
+  issn      = {15499626},
+  issue     = {11},
+  journal   = {Journal of Chemical Theory and Computation},
+  month     = {11},
+  pages     = {5620-5630},
+  publisher = {American Chemical Society},
+  title     = {Commute Maps: Separating Slowly Mixing Molecular Configurations for Kinetic Modeling},
+  volume    = {12},
+  year      = {2016}
+}
+
+@article{Mandelli2020,
+  abstract = {We present a method to sample reactive pathways via biased molecular dynamics simulations in trajectory space. We show that the use of enhanced sampling techniques enables unconstrained exploration of multiple reaction routes. Time correlation functions are conveniently computed via reweighted averages along a single trajectory and kinetic rates are accessed at no additional cost. These abilities are illustrated analyzing a model potential and the umbrella inversion of NH3 in water. The algorithm allows a parallel implementation and promises to be a powerful tool for the study of rare events. Molecular dynamics (MD) simulations have become an invaluable tool in many branches of science. While experiments generally access only spatially and time averaged quantities, atomically detailed MD simulations allow tracking in real time the microscopic mechanisms underlying complex phenomena. Nevertheless, there is a large class of problems where a straightforward application of MD simulations is impractical. Important examples are crystal nucleation, slow diffusion in solids, chemical reactions and conformational changes of large molecules. In all these cases, the presence of large free energy barriers leads to impractically long computational times. Therefore, it is necessary to design efficient algorithms able to accelerate phase space exploration. A vast number of such methods have been proposed. Here we focus on Metadynamics [1] (MetaD) that has recently gained great popularity. In MetaD, as in other similar methods, sampling is accelerated by the addition to the Hamiltonian of an external potential, also referred to as bias. However, the addition of this potential changes the natural dynamics of the system and only using an especially engineered bias some dynamical properties can be retrieved [2-5]. In a more ambitious effort , Donati et al. [6, 7] have described a general method to recover dynamical properties from biased trajectories. However, the procedure suggested is prone to numerical instabilities. Other researchers have taken a different point of view and direct attention has been focused on reactive paths (RPs) and their sampling [8-14]. A successful and widely used path-based method is transition path sampling (TPS) that is a Monte Carlo procedure for harvesting RPs that connect two a priori known metastable states [11]. The theoretical underpinning of this and similar approaches is the Onsager-Machlup (OM) action that determines the path probability distribution, as we shall discuss below. While highly successful, applications of TPS are met with some difficulties. The initial and final states need to be known beforehand, along with at least one RP connecting them. The computation of rate constants can also be time consuming [11, 15, 16]. Furthermore , if different pathways are possible (see figure 2) one encounters sampling problems such as path trapping in the vicinity of the original guess [17-19]. In this letter we combine the power of MetaD and path-based methods and show that one can harvest reactive trajectories without choosing a final state and opening the possibility of exploring multiple pathways in a single run. Although we apply an external bias, equilibrium time correlation functions can be straightforwardly obtained with reweighting procedures that do not encounter numerical problems. In the following, we briefly review the theory and formalism behind the algorithm and then present two applications. First to a model system, meant to show sampling of multiple reactive paths in one simulation. The second demonstrates the utility of the method in obtaining time correlation functions and kinetic rates in the realistic case of ammonia in water. The problem of interest here is the time evolution of a system coupled to a thermal bath at temperature T. Onsager and Machlup [20] have shown that in the over-damped regime the probability of observing a trajectory R(t) of duration τ is given by P [R(t)] ∝ e −S[R(t)] , (1) where the OM action is defined as S[R(t)] = τ 0 1 2σ 2 ˙ R(t) − F (t) mν 2 dt. (2) Here, m and ˙ R are the mass and velocity of the system and F is the force acting on it while ν is a friction coefficient and σ 2 =2k B T /mν. We will consider the dynamics of a molecular system composed of M atoms, described by a 3M-dimensional coordinate vector R=\{r j \} j=1,M. In numerical applications , a trajectory R(t) of duration τ is discretized into N configurations R n equally spaced in time and labelled by an index n=1, 2,. .. , N , and the OM action (2) becomes: S = N −1 n=1 M j=1 1 2σ 2 j r n+1 j − r n j ∆t − F n j m j ν 2 ∆t. (3)},
+  author   = {Davide Mandelli and Barak Hirshberg and Michele Parrinello},
+  title    = {Metadynamics of paths},
+  year     = {2020}
+}
+
+
+@article{Trozzi2021,
+  abstract  = {Proteins are the molecular machines of life. The multitude of possible conformations that proteins can adopt determines their free-energy landscapes. However, the inherently high dimensionality of a protein free-energy landscape poses a challenge to deciphering how proteins perform their functions. For this reason, dimensionality reduction is an active field of research for molecular biologists. The uniform manifold approximation and projection (UMAP) is a dimensionality reduction method based on a fuzzy topological analysis of data. In the present study, the performance of UMAP is compared with that of other popular dimensionality reduction methods such as t-distributed stochastic neighbor embedding (t-SNE), principal component analysis (PCA), and time-structure independent components analysis (tICA) in the context of analyzing molecular dynamics simulations of the circadian clock protein VIVID. A good dimensionality reduction method should accurately represent the data structure on the projected components. The comparison of the raw high-dimensional data with the projections obtained using different dimensionality reduction methods based on various metrics showed that UMAP has superior performance when compared with linear reduction methods (PCA and tICA) and has competitive performance and scalable computational cost.},
+  author    = {Francesco Trozzi and Xinlei Wang and Peng Tao},
+  doi       = {10.1021/acs.jpcb.1c02081},
+  issn      = {15205207},
+  issue     = {19},
+  journal   = {Journal of Physical Chemistry B},
+  month     = {5},
+  pages     = {5022-5034},
+  pmid      = {33973773},
+  publisher = {American Chemical Society},
+  title     = {UMAP as a Dimensionality Reduction Tool for Molecular Dynamics Simulations of Biomacromolecules: A Comparison Study},
+  volume    = {125},
+  year      = {2021}
+}
