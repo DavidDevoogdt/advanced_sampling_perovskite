@@ -29,3 +29,10 @@
 *.synctex.gz
 *.synctex.gz(busy)
 *.pdfsync
+
+
+.ipynb*
+
+external/*
+
+__pycache__
