@@ -1,12 +1,12 @@
-[submodule "REAP-ReinforcementLearningBasedAdaptiveSampling"]
-	path = REAP-ReinforcementLearningBasedAdaptiveSampling
+[submodule "external/REAP"]
+	path = external/REAP
 	url = git@github.com:ShuklaGroup/REAP-ReinforcementLearningBasedAdaptiveSampling.git
-[submodule "umap"]
-	path = umap
-	url = git@github.com:lmcinnes/umap.git
-[submodule "State-Predictive-Information-Bottleneck"]
-	path = State-Predictive-Information-Bottleneck
-	url = git@github.com:tiwarylab/State-Predictive-Information-Bottleneck.git
-[submodule "bgflow"]
-	path = bgflow
+[submodule "external/BoltzmannGenerator"]
+	path = external/BoltzmannGenerator
 	url = git@github.com:noegroup/bgflow.git
+[submodule "external/SPIB"]
+	path = external/SPIB
+	url = git@github.com:tiwarylab/State-Predictive-Information-Bottleneck.git
+[submodule "external/umap"]
+	path = external/umap
+	url = git@github.com:lmcinnes/umap.git
