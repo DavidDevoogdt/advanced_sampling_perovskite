@@ -33,6 +33,16 @@
 
 .ipynb*
 
-external/*
+# external/*
 
 __pycache__
+
+.ipynb_checkpoints
+.pytest_cache
+
+.vscode/launch.json
+.vscode/settings.json
+.gitignore
+
+
+src/Test*

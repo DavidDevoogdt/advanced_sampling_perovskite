@@ -1,8 +1,8 @@
 #!/bin/bash
 #
 #PBS -N TestASEMDCP2K
-#PBS -l walltime=72:00:00
-#PBS -l nodes=1:ppn=18
+#PBS -l walltime=00:05:00
+#PBS -l nodes=1:ppn=9
 
 
 module purge
@@ -15,23 +15,23 @@ echo $cluster
 
 case $n in
   'vsc43693')
-    pargs='vsc43693/Libraries'
+    pargs='vsc43693'
     case $cluster in
-      'swalot')
-        s='/user/gent/436/vsc43693/scratch/envs/swalot/bin/activate'
-        ;;
+      # 'swalot')
+      #   s='/user/gent/436/vsc43693/scratch/envs/swalot/bin/activate'
+      #   ;;
       'victini' | 'skitty')  
-        s='/user/gent/436/vsc43693/scratch/envs/ASECP2K/bin/activate'
+        s='/user/gent/436/vsc43693/scratch/envs/condaenv'
         ;;
       *)
         echo "please add this cluster to script"
         ;;
     esac
     ;;
-  'vsc42365')
-    pargs='vsc42365/Libraries'
-    s='/user/gent/423/vsc42365/scratch/ForInstall/ASECP2K/ASECP2K/bin/activate'
-    ;;
+  # 'vsc42365')
+  #   pargs='vsc42365/Libraries'
+  #   s='/user/gent/423/vsc42365/scratch/ForInstall/ASECP2K/ASECP2K/bin/activate'
+  #   ;;
   *)
     echo "not added"
     ;;
@@ -53,13 +53,13 @@ echo $s
 
 cd ${PBS_O_WORKDIR}
 
-# ACTIVATE ENVIRONMENT
-module load Python/3.8.2-GCCcore-9.3.0 
+# # ACTIVATE ENVIRONMENT
+# module load Python/3.8.2-GCCcore-9.3.0 
 module load CP2K/7.1-intel-2020a
-source $s
+source activate $s
 
 date
-python main.py $pargs
+python bg.py $pargs
 #python main.py 
 date
 

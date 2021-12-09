@@ -1,3 +1,4 @@
+from ase.io import read
 from pathlib import Path
 
 import ase
@@ -7,7 +8,7 @@ from ase import units
 
 class ASEbridge:
 
-    def __init__(self, name="vsc43693") -> None:
+    def __init__(self, name) -> None:
         self.name = name
 
     def get_CP2K_calculator(self):
@@ -18,13 +19,14 @@ class ASEbridge:
         path_basis = path_source / 'BASIS_SETS'
         path_dispersion = path_source / 'dftd3.dat'
 
-        CP2K_path = "../../calculator/CP2K/"
+        CP2K_path = "./calculator/CP2K"
 
         with open("{}/orig_cp2k.inp".format(CP2K_path), "r") as f:
             additional_input = f.read().format(path_basis, path_potentials, path_dispersion)
 
-        with open("{}/Pos.xyz.inp".format(CP2K_path), "r") as f:
-            atoms = f.read()
+        #temperature = 300
+        atoms = read("{}/Pos.xyz".format(CP2K_path))
+        #MaxwellBoltzmannDistribution(atoms, temperature_K=temperature)
 
         calculator = CP2K(
             atoms=atoms,
@@ -41,7 +43,7 @@ class ASEbridge:
             basis_set_file=None,    # disable
             charge=None,            # disable
             potential_file=None,    # disable
-            debug=False
+            debug=True
         )
 
         atoms.calc = calculator
