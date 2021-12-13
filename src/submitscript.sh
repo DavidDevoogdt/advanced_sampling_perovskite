@@ -2,10 +2,12 @@
 #
 #PBS -N TestASEMDCP2K
 #PBS -l walltime=00:05:00
-#PBS -l nodes=1:ppn=9
+#PBS -l nodes=1:ppn=2
 
 
-module purge
+#module purge
+
+#module list
 
 cluster=$(module list | grep -o "cluster/\w*" |  cut -c 9-)
 n=$(whoami)
@@ -20,7 +22,7 @@ case $n in
       # 'swalot')
       #   s='/user/gent/436/vsc43693/scratch/envs/swalot/bin/activate'
       #   ;;
-      'victini' | 'skitty')  
+      'victini' | 'skitty' | 'slaking')  
         s='/user/gent/436/vsc43693/scratch/envs/condaenv'
         ;;
       *)
@@ -54,9 +56,23 @@ echo $s
 cd ${PBS_O_WORKDIR}
 
 # # ACTIVATE ENVIRONMENT
+
+source activate /user/gent/436/vsc43693/scratch/envs/condaenv
+
 # module load Python/3.8.2-GCCcore-9.3.0 
-module load CP2K/7.1-intel-2020a
-source activate $s
+# module load CP2K/7.1-intel-2020a
+# module load Anaconda3
+# conda activate $s
+
+# source activate /user/gent/436/vsc43693/scratch/envs/condaenv
+
+# source activate  $s
+
+
+
+which python
+
+echo $PATH
 
 date
 python bg.py $pargs

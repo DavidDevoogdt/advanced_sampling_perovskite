@@ -14,7 +14,8 @@ class ASEbridge:
     def get_CP2K_calculator(self):
 
         #path_source = Path('/data/gent/vo/000/gvo00003/vsc42365/Libraries')
-        path_source = Path('/data/gent/vo/000/gvo00003/{}'.format(self.name))
+        path_source = Path(
+            '/data/gent/vo/000/gvo00003/{}/Libraries'.format(self.name))
         path_potentials = path_source / 'GTH_POTENTIALS'
         path_basis = path_source / 'BASIS_SETS'
         path_dispersion = path_source / 'dftd3.dat'
@@ -32,7 +33,7 @@ class ASEbridge:
             atoms=atoms,
             auto_write=True,
             basis_set=None,
-            command='mpirun cp2k_shell.popt',
+            command='mpirun cp2k_shell.sopt',
             cutoff=400 * units.Rydberg,
             stress_tensor=True,
             print_level='LOW',

@@ -46,3 +46,11 @@ __pycache__
 
 
 src/Test*
+TestASEMDCP2K.e*
+TestASEMDCP2K.o*
+cp2k-RESTART.kp*
+
+core.*
+cp2k.inp
+cp2k_restart.traj
+cp2k_params.ase

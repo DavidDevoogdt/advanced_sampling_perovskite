@@ -32,114 +32,27 @@ import matplotlib as mpl
 import sys
 
 
-dim = 2
-
-
 name = "vsc43693"  # sys.argv[1]
+temp = 300
 
 print(name)
 
-target = PerovskiteEnergy(dim, name)
+target = PerovskiteEnergy(name, temp)
 
-# define some plotting functions
-
-
-def plot_energy(energy, extent=(-2.5, 2.5), resolution=100, dim=2):
-    """ Plot energy functions in 2D """
-    xs = torch.meshgrid([torch.linspace(*extent, resolution)
-                        for _ in range(2)])
-    xs = torch.stack(xs, dim=-1).view(-1, 2)
-    xs = torch.cat([
-        xs,
-        torch.Tensor(xs.shape[0], dim - xs.shape[-1]).zero_()
-    ], dim=-1)
-    us = energy.energy(xs).view(resolution, resolution)
-    us = torch.exp(-us)
-    plt.imshow(assert_numpy(us).T, extent=extent * 2)
-    plt.xlim = (extent[0], extent[1])
-    plt.ylim = (extent[0], extent[1])
-
-
-def plot_samples(samples, weights=None, range=None):
-    """ Plot sample histogram in 2D """
-    samples = assert_numpy(samples)
-    plt.hist2d(
-        samples[:, 0],
-        -samples[:, 1],
-        weights=assert_numpy(weights) if weights is not None else weights,
-        bins=100,
-        norm=mpl.colors.LogNorm(),
-        range=range
-    )
-
-
-def plot_bg(bg, target, n_samples=10000, range=[-2.5, 2.5], dim=2):
-    """ Plot target energy, bg energy and bg sample histogram"""
-    plt.figure(figsize=(12, 4))
-    plt.subplot(1, 3, 1)
-    plot_energy(target, extent=range, dim=dim)
-    plt.title("Target energy")
-    plt.subplot(1, 3, 2)
-    plot_energy(bg, extent=range, dim=dim)
-    plt.title("BG energy")
-    plt.subplot(1, 3, 3)
-    plot_samples(bg.sample(n_samples), range=[range, range])
-    plt.title("BG samples")
-
-
-def plot_weighted_energy_estimate(bg, target, n_samples=100000, extent=None, n_bins=100, range=[-2, 2], dim=dim):
-    """ Plot weighed energy from samples """
-    samples, latent, dlogp = bg.sample(
-        n_samples, with_latent=True, with_dlogp=True)
-    log_weights = bg.log_weights_given_latent(samples, latent, dlogp)
-
-    plt.figure(figsize=(12, 4))
-
-    plt.subplot(1, 3, 1)
-    _, bins, _ = plt.hist(assert_numpy(samples[:, 0]), histtype="step", log=True,
-                          bins=n_bins, weights=None, density=True, label="samples", range=range)
-    xs = torch.linspace(*range, n_bins).view(-1, 1)
-    xs = torch.cat([xs, torch.zeros(xs.shape[0], dim - 1)],
-                   dim=-1).view(-1, dim)
-    us = target.energy(xs).view(-1)
-    us = torch.exp(-us)
-    us = us / torch.sum(us * (bins[-1] - bins[0]) / n_bins)
-    plt.plot(xs[:, 0], us, label="$\log p(x)$")
-    plt.xlabel("$x0$")
-    plt.ylabel("log density")
-    plt.legend()
-    plt.title("unweighed energy")
-
-    plt.subplot(1, 3, 2)
-    _, bins, _ = plt.hist(assert_numpy(samples[:, 0]), histtype="step", log=True, bins=n_bins, weights=assert_numpy(
-        log_weights.exp()), density=True, label="samples", range=range)
-    plt.plot(xs[:, 0], us, label="$\log p(x)$")
-    plt.xlabel("$x0$")
-    plt.legend()
-    plt.title("weighed energy")
-
-    plt.subplot(1, 3, 3)
-    plt.xlabel("$x0$")
-    plt.ylabel("$x1$")
-    plot_samples(samples, weights=log_weights.exp(), range=[range, range])
-    plt.title("weighed samples")
-
-
-plot_energy(target, dim=dim)
 
 # define a MCMC sampler to sample from the target energy
 
 
-init_state = torch.Tensor([[-2, 0], [2, 0]])
-init_state = torch.cat([init_state, torch.Tensor(
-    init_state.shape[0], dim-2).normal_()], dim=-1)
+init_state = target.atom_to_tensor()
+# init_state = torch.cat([init_state, torch.Tensor(
+#     init_state.shape[0], dim-2).normal_()], dim=-1)
 target_sampler = GaussianMCMCSampler(target, init_state=init_state)
 
 # sample some data
 
 data = target_sampler.sample(50000)
 
-plot_samples(data)
+# plot_samples(data)
 
 
 class HypersphericalPrior(Energy, Sampler):
@@ -166,6 +79,8 @@ class HypersphericalPrior(Energy, Sampler):
 
 # now set up a prior
 
+
+print("expected crash :p")
 
 prior = NormalDistribution(dim)
 # prior = HypersphericalPrior(dim, concentration=10)
