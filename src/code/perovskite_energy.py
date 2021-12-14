@@ -8,10 +8,7 @@ import torch
 import numpy as np
 
 
-
-
 __all__ = ["PerovskiteEnergy"]
-
 
 # test implememtation, not connectep at the moment
 

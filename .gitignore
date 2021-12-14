@@ -55,3 +55,5 @@ cp2k.inp
 cp2k_restart.traj
 cp2k_params.ase
 cp2k_results.json
+
+.vscode*

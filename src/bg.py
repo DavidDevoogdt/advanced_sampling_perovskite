@@ -27,6 +27,8 @@ from bgflow.utils.types import is_list_or_tuple
 from bgflow.utils.train import IndexBatchIterator
 import bgflow
 
+from os.path import exists
+
 
 def bg():
 
@@ -41,7 +43,12 @@ def bg():
     init_state = target.init_state
 
     target_sampler = GaussianMCMCSampler(target, init_state=init_state)
-    data = target_sampler.sample(50)
+
+    if exists('data.pt'):
+        data = torch.load('data.pt')
+    else:
+        data = target_sampler.sample(5)
+        torch.save('data.pt')
 
     priorDim = 2
     prior = NormalDistribution(priorDim)
@@ -96,9 +103,10 @@ def bg():
     split_flow = bgflow.SplitFlow(
         dim_cell_lengths, dim_cell_angle, dim_cell_cartesion)
 
-    for i in range(n_realnvp_blocks):
-        layers.append(RealNVP(totaldim, hidden=[128, 128, 128]))
     layers.append(split_flow)
+    for _ in range(n_realnvp_blocks):
+        layers.append(RealNVP(totaldim, hidden=[60, 60, 60]))
+    layers.append(bg.InverseFlow(split_flow))
 
     flow = bgflow.SequentialFlow(layers).to(ctx)
 
