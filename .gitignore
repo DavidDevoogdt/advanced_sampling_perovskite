@@ -57,3 +57,6 @@ cp2k_params.ase
 cp2k_results.json
 
 .vscode*
+data.pt
+target_sampler.pt
+target.pt

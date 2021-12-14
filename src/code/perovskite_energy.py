@@ -15,9 +15,8 @@ __all__ = ["PerovskiteEnergy"]
 
 class PerovskiteEnergy(Energy):
     # name = vsc_account number
-    def __init__(self, name, temp):
-        self.ab = ASEbridge(name)
-        self.name = name
+    def __init__(self, temp):
+        self.ab = ASEbridge()
         self.temp = temp
         self.calc = self.ab.get_CP2K_calculator()
         self.dims = self.calc.atoms.get_positions().shape
@@ -34,14 +33,17 @@ class PerovskiteEnergy(Energy):
         self.init_state = self.atom_to_tensor().reshape(
             (1, self.totaldims))  # this a nd array with initial states
 
-    def add_init_configuration():
-        atoms = read("{}/Pos.xyz".format(CP2K_Path))
+    def add_init_configuration(self, name):
+        at = read("{}{}".format(CP2K_Path, name))
+        cx = self.atom_to_tensor(at)
+        self.init_state = torch.cat(
+            [self.init_state, cx.reshape(1, self.totaldims)], dim=0)
 
     def tensor_to_atoms(self, cx):
         at = self.calc.atoms.copy()
 
-        c = cx[:6].cpu().numpy()
-        x = cx[6:].cpu().numpy()
+        c = cx[:6].detach().cpu().numpy()
+        x = cx[6:].detach().cpu().numpy()
 
         at.cell = at.cell.fromcellpar(c)
         at.set_positions(x.reshape(self.dims))

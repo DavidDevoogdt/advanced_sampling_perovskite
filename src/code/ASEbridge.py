@@ -12,8 +12,8 @@ from config import CP2K_Path
 
 class ASEbridge:
 
-    def __init__(self, name) -> None:
-        self.name = name
+    def __init__(self) -> None:
+        pass
 
     def get_CP2K_calculator(self):
 

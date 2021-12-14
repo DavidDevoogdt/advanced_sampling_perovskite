@@ -30,32 +30,33 @@ import bgflow
 from os.path import exists
 
 
-def bg():
-
-    name = "vsc43693"  # sys.argv[1]
-    temp = 300
-
-    print(name)
-
-    target = PerovskiteEnergy(name, temp)
+def bg(temp=300):
+    target = PerovskiteEnergy(temp)
+    target.add_init_configuration("Pos2.xyz")  # second phase
 
     ctx = target.ctx
-    init_state = target.init_state
 
-    target_sampler = GaussianMCMCSampler(target, init_state=init_state)
+    target_sampler = GaussianMCMCSampler(
+        target, init_state=target.init_state)
 
+    # time intensive step, load from disk
     if exists('data.pt'):
         data = torch.load('data.pt')
     else:
         data = target_sampler.sample(5)
-        torch.save('data.pt')
+        torch.save(data, 'data.pt')
 
-    priorDim = 2
-    prior = NormalDistribution(priorDim)
+    dim_cell_lengths = 6
+    dim_cell_cartesion = 15
+
+    # throw away 3 translation dims and 3 rotations
+    priorDim = target.init_state.shape[1]
+    mean = torch.zeros(priorDim).to(ctx)
+    prior = NormalDistribution(priorDim, mean=mean)
 
     # define a flow with RNVP coupling layers
 
-    class RealNVP(bgflow.SequentialFlow):
+    class RealNVP(SequentialFlow):
 
         def __init__(self, dim, hidden):
             self.dim = dim
@@ -65,17 +66,18 @@ def bg():
         def _create_layers(self):
             dim_channel1 = self.dim//2
             dim_channel2 = self.dim - dim_channel1
-            split_into_2 = bgflow.SplitFlow(dim_channel1, dim_channel2)
+            split_into_2 = SplitFlow(dim_channel1, dim_channel2)
 
             layers = [
                 # -- split
                 split_into_2,
                 # --transform
                 self._coupling_block(dim_channel1, dim_channel2),
-                bgflow.SwapFlow(),
+                SwapFlow(),
                 self._coupling_block(dim_channel2, dim_channel1),
+                SwapFlow(),
                 # -- merge
-                bgflow.InverseFlow(split_into_2)
+                InverseFlow(split_into_2)
             ]
             return layers
 
@@ -95,147 +97,49 @@ def bg():
     n_realnvp_blocks = 5
     layers = []
 
-    dim_cell_lengths = 3
-    dim_cell_angle = 3
-    dim_cell_cartesion = 15
-    totaldim = dim_cell_lengths+dim_cell_angle+dim_cell_cartesion
+    #totaldim = dim_cell_lengths+dim_cell_cartesion
 
-    split_flow = bgflow.SplitFlow(
-        dim_cell_lengths, dim_cell_angle, dim_cell_cartesion)
-
-    layers.append(split_flow)
     for _ in range(n_realnvp_blocks):
-        layers.append(RealNVP(totaldim, hidden=[60, 60, 60]))
-    layers.append(bg.InverseFlow(split_flow))
+        layers.append(RealNVP(priorDim, hidden=[60, 60, 60]))
+    # layers.append(SplitFlow(1))
+    # layers.append(InverseFlow(SplitFlow(1)))
 
-    flow = bgflow.SequentialFlow(layers).to(ctx)
+    flow = SequentialFlow(layers).to(ctx)
 
     #
-
     bg = BoltzmannGenerator(prior, flow, target)
+    # flow.forward(prior.sample(3),reversed=False)[0]
 
     # first training
+    nll_optimizer = torch.optim.Adam(bg.parameters(), lr=1e-3)
+    nll_trainer = bgflow.KLTrainer(
+        bg,
+        optim=nll_optimizer,
+        train_energy=False
+    )
 
-    class LossReporter:
-        """
-            Simple reporter use for reporting losses and plotting them.
-        """
+    nll_trainer.train(
+        n_iter=100,
+        data=data,
+        batchsize=3,
+        n_print=2,
+        w_energy=0.0
+    )
 
-        def __init__(self, *labels):
-            self._labels = labels
-            self._n_reported = len(labels)
-            self._raw = [[] for _ in range(self._n_reported)]
+    # mixed training
+    mixed_optimizer = torch.optim.Adam(bg.parameters(), lr=1e-4)
+    mixed_trainer = bgflow.KLTrainer(
+        bg,
+        optim=mixed_optimizer,
+        train_energy=True
+    )
 
-        def report(self, *losses):
-            assert len(losses) == self._n_reported
-            for i in range(self._n_reported):
-                self._raw[i].append(assert_numpy(losses[i]))
-
-        def plot(self, n_smooth=10):
-            fig, axes = plt.subplots(self._n_reported, sharex=True)
-            if not isinstance(axes, np.ndarray):
-                axes = [axes]
-            fig.set_size_inches((8, 4 * self._n_reported), forward=True)
-            for i, (label, raw, axis) in enumerate(zip(self._labels, self._raw, axes)):
-                raw = assert_numpy(raw).reshape(-1)
-                kernel = np.ones(shape=(n_smooth,)) / n_smooth
-                smoothed = np.convolve(raw, kernel, mode="valid")
-                axis.plot(smoothed)
-                axis.set_ylabel(label)
-                if i == self._n_reported - 1:
-                    axis.set_xlabel("Iteration")
-
-        def recent(self, n_recent=1):
-            return np.array([raw[-n_recent:] for raw in self._raw])
-
-    # initial training with likelihood maximization on data set
-    n_batch = 32
-    batch_iter = IndexBatchIterator(len(data), n_batch)
-
-    optim = torch.optim.Adam(bg.parameters(), lr=5e-3)
-
-    n_epochs = 5
-    n_report_steps = 50
-
-    reporter = LossReporter("NLL")
-
-    for epoch in range(n_epochs):
-        for it, idxs in enumerate(batch_iter):
-            batch = data[idxs]
-
-            optim.zero_grad()
-
-            # negative log-likelihood of the batch is equal to the energy of the BG
-            nll = bg.energy(batch).mean()
-            nll.backward()
-
-            reporter.report(nll)
-
-            optim.step()
-
-            if it % n_report_steps == 0:
-                print("\repoch: {0}, iter: {1}/{2}, NLL: {3:.4}".format(
-                    epoch,
-                    it,
-                    len(batch_iter),
-                    *reporter.recent(1).ravel()
-                ), end="")
-    reporter.plot()
-
-    # bg after ML training
-
-    # plot_bg(bg, target, dim=dim)
-    # plot_weighted_energy_estimate(bg, target, dim=dim)
-
-    # train with convex mixture of NLL and KL loss
-
-    n_kl_samples = 128
-    n_batch = 128
-    batch_iter = IndexBatchIterator(len(data), n_batch)
-
-    optim = torch.optim.Adam(bg.parameters(), lr=5e-3)
-
-    n_epochs = 5
-    n_report_steps = 50
-
-    # mixing parameter
-    lambdas = torch.linspace(1., 0.5, n_epochs)
-
-    reporter = LossReporter("NLL", "KLL")
-
-    torch.linspace(1., 0.5, n_epochs)
-
-    for epoch, lamb in enumerate(lambdas):
-        for it, idxs in enumerate(batch_iter):
-            batch = data[idxs]
-
-            optim.zero_grad()
-
-            # negative log-likelihood of the batch is equal to the energy of the BG
-            nll = bg.energy(batch).mean()
-
-            # aggregate weighted gradient
-            (lamb * nll).backward()
-
-            # kl divergence to the target
-            kll = bg.kldiv(n_kl_samples).mean()
-
-            # aggregate weighted gradient
-            ((1. - lamb) * kll).backward()
-
-            reporter.report(nll, kll)
-
-            optim.step()
-
-            if it % n_report_steps == 0:
-                print("\repoch: {0}, iter: {1}/{2}, lambda: {3}, NLL: {4:.4}, KLL: {5:.4}".format(
-                    epoch,
-                    it,
-                    len(batch_iter),
-                    lamb,
-                    *reporter.recent(1).ravel()
-                ), end="")
-
-    reporter.plot()
-
-    # bg after ML + KL training
+    mixed_trainer.train(
+        n_iter=2000,
+        data=data,
+        batchsize=1000,
+        n_print=100,
+        w_energy=0.1,
+        w_likelihood=0.9,
+        clip_forces=20.0
+    )
