@@ -5,6 +5,10 @@ import ase
 from ase.calculators.cp2k import CP2K
 from ase import units
 
+from config import cp2k_shell_command
+from config import debug
+from config import CP2K_Path
+
 
 class ASEbridge:
 
@@ -13,9 +17,8 @@ class ASEbridge:
 
     def get_CP2K_calculator(self):
 
-        #path_source = Path('/data/gent/vo/000/gvo00003/vsc42365/Libraries')
         path_source = Path(
-            '/data/gent/vo/000/gvo00003/{}/Libraries'.format(self.name))
+            "{}/Libraries/".format(CP2K_Path))
         path_potentials = path_source / 'GTH_POTENTIALS'
         path_basis = path_source / 'BASIS_SETS'
         path_dispersion = path_source / 'dftd3.dat'
@@ -33,7 +36,7 @@ class ASEbridge:
             atoms=atoms,
             auto_write=True,
             basis_set=None,
-            command='mpirun cp2k_shell.sopt',
+            command=cp2k_shell_command,
             cutoff=400 * units.Rydberg,
             stress_tensor=True,
             print_level='LOW',
@@ -44,7 +47,7 @@ class ASEbridge:
             basis_set_file=None,    # disable
             charge=None,            # disable
             potential_file=None,    # disable
-            debug=True
+            debug=debug
         )
 
         atoms.calc = calculator
