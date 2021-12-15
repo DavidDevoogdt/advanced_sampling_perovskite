@@ -19,28 +19,34 @@ class PerovskiteEnergy(Energy):
         self.ab = ASEbridge()
         self.temp = temp
         self.calc = self.ab.get_CP2K_calculator()
-        self.dims = self.calc.atoms.get_positions().shape
-        self.totaldims = int(np.prod(np.array(self.dims))
-                             ) + 6  # also cell parmams
+
+        # context tensor torch
+        device = "cuda:0" if torch.cuda.is_available() else "cpu"
+        dtype = torch.float32
+        self.ctx = torch.zeros([], device=device, dtype=dtype)
+
+        self.init_state = None
+        self.add_init_configuration()
 
         super().__init__(self.totaldims)
 
-        device = "cuda:0" if torch.cuda.is_available() else "cpu"
-        dtype = torch.float32
-        # context tensor torch
-        self.ctx = torch.zeros([], device=device, dtype=dtype)
+    def add_init_configuration(self, atom_names=None):
+        #at = read("{}{}".format(CP2K_Path, name))
+        atom_list = self.ab.get_atoms(atom_names)
+        for at in atom_list:
+            cx = self.atom_to_tensor(at)
 
-        self.init_state = self.atom_to_tensor().reshape(
-            (1, self.totaldims))  # this a nd array with initial states
-
-    def add_init_configuration(self, name):
-        at = read("{}{}".format(CP2K_Path, name))
-        cx = self.atom_to_tensor(at)
-        self.init_state = torch.cat(
-            [self.init_state, cx.reshape(1, self.totaldims)], dim=0)
+            if self.init_state is None:
+                self.totaldims = cx.shape[0]
+                self.init_state = cx.reshape(1, self.totaldims)
+                self.init_atom = at
+                self.dims = at.positions.shape
+            else:
+                self.init_state = torch.cat(
+                    [self.init_state, cx.reshape(1, self.totaldims)], dim=0)
 
     def tensor_to_atoms(self, cx):
-        at = self.calc.atoms.copy()
+        at = self.init_atom
 
         c = cx[:6].detach().cpu().numpy()
         x = cx[6:].detach().cpu().numpy()
@@ -51,11 +57,7 @@ class PerovskiteEnergy(Energy):
         at.calc = self.calc
         return at
 
-    def atom_to_tensor(self, at=None):
-        # encode the parameters in a torch array
-        if at is None:
-            at = self.calc.atoms
-
+    def atom_to_tensor(self, at):
         x = at.get_positions()
         c = at.get_cell().cellpar()
 

@@ -42,7 +42,6 @@ __pycache__
 
 .vscode/launch.json
 .vscode/settings.json
-.gitignore
 
 
 src/Test*
@@ -60,3 +59,5 @@ cp2k_results.json
 data.pt
 target_sampler.pt
 target.pt
+
+data/*
