@@ -7,12 +7,10 @@ from config import CP2K_Path
 import torch
 import numpy as np
 
-
 __all__ = ["PerovskiteEnergy"]
 
+
 # test implememtation, not connectep at the moment
-
-
 class PerovskiteEnergy(Energy):
     # name = vsc_account number
     def __init__(self, temp):
@@ -43,7 +41,8 @@ class PerovskiteEnergy(Energy):
                 self.dims = at.positions.shape
             else:
                 self.init_state = torch.cat(
-                    [self.init_state, cx.reshape(1, self.totaldims)], dim=0)
+                    [self.init_state,
+                     cx.reshape(1, self.totaldims)], dim=0)
 
     def tensor_to_atoms(self, cx):
         at = self.init_atom
@@ -74,7 +73,7 @@ class PerovskiteEnergy(Energy):
 
         n = x.shape[0]
 
-        ener = x[:, [0]].clone()*0
+        ener = x[:, [0]].clone() * 0
 
         # this can be parallised
         for i in range(n):

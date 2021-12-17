@@ -16,20 +16,22 @@ from collections.abc import Iterable
 
 
 class ASEbridge:
-
     def __init__(self) -> None:
         pass
 
     def get_CP2K_calculator(self):
 
-        path_source = Path(
-            "{}/{}/Libraries/".format(config.root_path, config.CP2K_Path))
+        path_source = Path("{}/{}/Libraries/".format(config.root_path,
+                                                     config.CP2K_Path))
         path_potentials = path_source / 'GTH_POTENTIALS'
         path_basis = path_source / 'BASIS_SETS'
         path_dispersion = path_source / 'dftd3.dat'
 
-        with open("{}/{}/{}".format(config.root_path, config.CP2K_Path, config.cp2k_inp), "r") as f:
-            additional_input = f.read().format(path_basis, path_potentials, path_dispersion)
+        with open(
+                "{}/{}/{}".format(config.root_path, config.CP2K_Path,
+                                  config.cp2k_inp), "r") as f:
+            additional_input = f.read().format(path_basis, path_potentials,
+                                               path_dispersion)
 
         # atoms = read("{}/Pos.xyz".format(CP2K_path))
 
@@ -43,13 +45,12 @@ class ASEbridge:
             print_level='LOW',
             inp=additional_input,
             pseudo_potential=None,
-            max_scf=None,           # disable
-            xc=None,                # disable
-            basis_set_file=None,    # disable
-            charge=None,            # disable
-            potential_file=None,    # disable
-            debug=config.debug
-        )
+            max_scf=None,  # disable
+            xc=None,  # disable
+            basis_set_file=None,  # disable
+            charge=None,  # disable
+            potential_file=None,  # disable
+            debug=config.debug)
 
         return calculator
 
@@ -57,9 +58,14 @@ class ASEbridge:
         if atom_files is None:
             atom_files = config.atoms_files
         if isinstance(atom_files, str):
-            atom_files = [atom_files, ]
+            atom_files = [
+                atom_files,
+            ]
 
-        return [read("{}/{}/{}".format(config.root_path, config.CP2K_Path, name)) for name in atom_files]
+        return [
+            read("{}/{}/{}".format(config.root_path, config.CP2K_Path, name))
+            for name in atom_files
+        ]
 
     def get_Plumed_CP2K_calculator(self):
         raise NotImplementedError

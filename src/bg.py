@@ -11,16 +11,8 @@ from bgflow import GaussianMCMCSampler
 from bgflow import Energy, Sampler
 from torch.distributions.chi2 import Chi2
 from torch.distributions.gamma import Gamma
-from bgflow.nn import (
-    DenseNet,
-    SequentialFlow,
-    CouplingFlow,
-    AffineFlow,
-    SplitFlow,
-    InverseFlow,
-    SwapFlow,
-    AffineTransformer
-)
+from bgflow.nn import (DenseNet, SequentialFlow, CouplingFlow, AffineFlow,
+                       SplitFlow, InverseFlow, SwapFlow, AffineTransformer)
 from bgflow import NormalDistribution
 from bgflow import BoltzmannGenerator
 from bgflow.utils.types import is_list_or_tuple
@@ -36,8 +28,7 @@ def bg(temp=300):
 
     ctx = target.ctx
 
-    target_sampler = GaussianMCMCSampler(
-        target, init_state=target.init_state)
+    target_sampler = GaussianMCMCSampler(target, init_state=target.init_state)
 
     # time intensive step, load from disk
     if exists('data.pt'):
@@ -63,41 +54,30 @@ def bg(temp=300):
 
     # first training
     nll_optimizer = torch.optim.Adam(bg.parameters(), lr=1e-3)
-    nll_trainer = bgflow.KLTrainer(
-        bg,
-        optim=nll_optimizer,
-        train_energy=False
-    )
+    nll_trainer = bgflow.KLTrainer(bg, optim=nll_optimizer, train_energy=False)
 
-    nll_trainer.train(
-        n_iter=100,
-        data=data,
-        batchsize=3,
-        n_print=2,
-        w_energy=0.0
-    )
+    nll_trainer.train(n_iter=100,
+                      data=data,
+                      batchsize=3,
+                      n_print=2,
+                      w_energy=0.0)
 
     # mixed training
     mixed_optimizer = torch.optim.Adam(bg.parameters(), lr=1e-4)
-    mixed_trainer = bgflow.KLTrainer(
-        bg,
-        optim=mixed_optimizer,
-        train_energy=True
-    )
+    mixed_trainer = bgflow.KLTrainer(bg,
+                                     optim=mixed_optimizer,
+                                     train_energy=True)
 
-    mixed_trainer.train(
-        n_iter=2000,
-        data=data,
-        batchsize=1000,
-        n_print=100,
-        w_energy=0.1,
-        w_likelihood=0.9,
-        clip_forces=20.0
-    )
+    mixed_trainer.train(n_iter=2000,
+                        data=data,
+                        batchsize=1000,
+                        n_print=100,
+                        w_energy=0.1,
+                        w_likelihood=0.9,
+                        clip_forces=20.0)
 
 
 class RealNVP(SequentialFlow):
-
     def __init__(self, dim1, totaldim, hidden):
         self.dim1 = dim1
         self.tdim = totaldim
@@ -123,13 +103,12 @@ class RealNVP(SequentialFlow):
         return layers
 
     def _dense_net(self, dim1, dim2):
-        return DenseNet(
-            [dim1, *self.hidden, dim2],
-            activation=torch.nn.ReLU()
-        )
+
+        layers = [dim1, *self.hidden, dim2]
+        return DenseNet(layers, activation=torch.nn.ReLU())
 
     def _coupling_block(self, dim1, dim2):
-        return CouplingFlow(AffineTransformer(
-            shift_transformation=self._dense_net(dim1, dim2),
-            scale_transformation=self._dense_net(dim1, dim2)
-        ))
+        return CouplingFlow(
+            AffineTransformer(shift_transformation=self._dense_net(dim1, dim2),
+                              scale_transformation=self._dense_net(dim1,
+                                                                   dim2)))
