@@ -61,7 +61,6 @@ class ASEbridge:
             atom_files = [
                 atom_files,
             ]
-
         return [
             read("{}/{}/{}".format(config.root_path, config.CP2K_Path, name))
             for name in atom_files

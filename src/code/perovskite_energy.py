@@ -1,11 +1,15 @@
+from os import error
 from ase.units import C
 from ase.io import read
 from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
+from torch._C import InferredType
 from .ASEbridge import ASEbridge
 from bgflow import Energy
 from config import CP2K_Path
 import torch
 import numpy as np
+import math
+import config
 
 __all__ = ["PerovskiteEnergy"]
 
@@ -46,8 +50,10 @@ class PerovskiteEnergy(Energy):
 
     def tensor_to_atoms(self, cx):
         at = self.init_atom
-
         c = cx[:6].detach().cpu().numpy()
+
+        c[3:6] = (c[3:6] + 1) * 90
+
         x = cx[6:].detach().cpu().numpy()
 
         at.cell = at.cell.fromcellpar(c)
@@ -59,6 +65,7 @@ class PerovskiteEnergy(Energy):
     def atom_to_tensor(self, at):
         x = at.get_positions()
         c = at.get_cell().cellpar()
+        c[3:6] = c[3:6] / 90 - 1  #mean 0
 
         cx = torch.Tensor(np.concatenate((c, x.flatten()))).to(self.ctx)
         return cx
@@ -77,8 +84,24 @@ class PerovskiteEnergy(Energy):
 
         # this can be parallised
         for i in range(n):
-            at = self.tensor_to_atoms(x[i, :])
-            MaxwellBoltzmannDistribution(at, temperature_K=temperature)
 
-            ener[i] = at.get_potential_energy()
+            try:  #prone to error
+                at = self.tensor_to_atoms(x[i, :])
+                MaxwellBoltzmannDistribution(at, temperature_K=temperature)
+                ener[i] = at.get_potential_energy()
+            except Exception as e1:  #energy calculation faild due to bad config
+
+                if config.debug == True:
+                    print(
+                        "something went wrong with CP2K calculator, resetting\n{}"
+                        .format(e1),
+                        flush=True)
+                try:
+                    del self.calc
+                except Exception as e2:
+                    pass
+
+                #setup a new calculator,assume the error is due to a bad configuration
+                self.calc = self.ab.get_CP2K_calculator()
+                ener[i] = math.inf
         return ener

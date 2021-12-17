@@ -13,8 +13,8 @@ atoms_files = [
 cp2k_inp = "orig_cp2k.inp"
 
 # hpc setting
-walltime = "1:00:00"
-nodes = "nodes=1:ppn=2"
+walltime = "72:00:00"
+nodes = "nodes=1:ppn=18"
 
 # which modules to test
 do_bg = True

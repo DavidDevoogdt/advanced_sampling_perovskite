@@ -10,7 +10,7 @@ import argparse
 # sets up a new folder for all the output. If run on hpc, the python scripts is called with qsub. Config file is copied as reference
 
 
-def main(foldername=None, hpc=False):
+def main(foldername=None, hpc=False, debug=False):
 
     if foldername is None:
         foldername = time.strftime("%Y-%m-%d_%H-%M-%S")
@@ -25,18 +25,18 @@ def main(foldername=None, hpc=False):
     os.chdir(data_folder.resolve())
 
     if hpc:  # hpc user
-        write_submit(rp)
+        write_submit(rp, debug)
         os.system('qsub submitscript.sh')
         print("job submitted, folder name {}".format(foldername))
     else:  # regular user
         print("folder name {}, running directly".format(foldername))
-        l()
+        l(debug)
 
 
-def write_submit(rp):
+def write_submit(rp, debug):
     with open(rp / "calculator" / 'submitscript_template.sh') as f:
         submitscript = f.read().format(config.walltime, config.nodes,
-                                       str(rp.resolve()))
+                                       str(rp.resolve()), str(debug))
     with open("submitscript.sh", 'w') as f:
         f.write(submitscript)
 
@@ -50,7 +50,8 @@ if __name__ == "__main__":
         default=None,
         help='foldername for all output. Default -> current time')
     parser.add_argument('--hpc', action='store_true', help='run script on hpc')
+    parser.add_argument('--debug', action='store_true', help='debug')
 
     args = parser.parse_args()
 
-    main(args.foldername, args.hpc)
+    main(args.foldername, args.hpc, args.debug)
