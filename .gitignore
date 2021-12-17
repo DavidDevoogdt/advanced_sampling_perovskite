@@ -61,3 +61,5 @@ target_sampler.pt
 target.pt
 
 data/*
+
+*.pyc

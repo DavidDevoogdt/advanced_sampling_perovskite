@@ -4,13 +4,16 @@
 #PBS -l walltime={}
 #PBS -l {}
 
-cd ${{PBS_O_WORKDIR}}
+. ~/setup_python.sh
 
-source activate {}
-module load CP2K/7.1-intel-2020a
+cd ${{PBS_O_WORKDIR}}
+#module load CP2K/7.1-intel-2020a
+
+module list
+which python
 
 date
-python {}/src/loader.py
+python {}/loader.py 
 date
 
 
