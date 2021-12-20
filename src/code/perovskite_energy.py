@@ -54,10 +54,10 @@ class PerovskiteEnergy(Energy):
 
     def tensor_to_atoms(self, cx):
         at = self.init_atom
-        c = cx[:6].clone().cpu().numpy()
+        c = cx[:6].clone().cpu().detach().numpy()
         c[3:6] = (c[3:6] + 1) * 90
 
-        x = cx[6:].clone().cpu().numpy()
+        x = cx[6:].clone().cpu().detach().numpy()
 
         at.cell = at.cell.fromcellpar(c)
         at.set_positions(x.reshape(self.dims))
@@ -85,6 +85,8 @@ class PerovskiteEnergy(Energy):
         n = x.shape[0]
 
         ener = x[:, [0]].clone() * 0
+
+        print("{:4d}|".format(self.n), end='', flush=True)
 
         # this can be parallised
         for i in range(n):
@@ -115,10 +117,11 @@ class PerovskiteEnergy(Energy):
                 self.calc = self.ab.get_CP2K_calculator()
                 ener[i] = math.inf
 
-            print("{:4d}:{}:{:10.4f}".format(self.n, i, float(ener[i])))
+            print("{}:{:10.4f}\t".format(i, float(ener[i])),
+                  end='',
+                  flush=True)
 
+        print("", flush=True)
         self.n = self.n + 1
-
-        sys.stdout.flush()
 
         return ener

@@ -34,7 +34,7 @@ class ASEbridge:
             basis_set=None,
             command=src.config.cp2k_shell,
             cutoff=400 * units.Rydberg,
-            stress_tensor=True,
+            stress_tensor=False,
             print_level='LOW',
             inp=additional_input,
             pseudo_potential=None,

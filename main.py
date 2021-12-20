@@ -38,8 +38,10 @@ def main(args):
 
 def write_submit(rp, args):
     with open(rp / "calculator" / 'submitscript_template.sh') as f:
-        submitscript = f.read().format(args.hpc_walltime, args.hpc_nodes,
-                                       str(rp.resolve()))
+        submitscript = f.read().format(
+            args.hpc_walltime,
+            "nodes={}:ppn={}".format(args.hpc_nodes, args.hpc_ppn),
+            str(rp.resolve()))
     with open("submitscript.sh", 'w') as f:
         f.write(submitscript)
 
@@ -79,7 +81,8 @@ if __name__ == "__main__":
     #hpc stuff
     group3.add_argument('--hpc', action='store_true', help='run script on hpc')
     group3.add_argument('--hpc_walltime', default="72:00:00", help='')
-    group3.add_argument('--hpc_nodes', default="nodes=1:ppn=18", help='')
+    group3.add_argument('--hpc_nodes', default=1, help='')
+    group3.add_argument('--hpc_ppn', default=9, help='')
 
     args = parser.parse_args()
 

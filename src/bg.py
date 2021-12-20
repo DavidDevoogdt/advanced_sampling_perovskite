@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import pickle
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -24,26 +25,27 @@ import src
 
 
 def bg(temp=300):
-    if src.config.debug:
-        print("## creating CP2K", flush=True)
+    # if src.config.debug:
+    print("## creating CP2K", flush=True)
     target = PerovskiteEnergy(temp)
-    target.add_init_configuration("Pos2.xyz")  # second phase
+    #target.add_init_configuration("Pos2.xyz")  # second phase
 
     ctx = target.ctx
 
-    if src.config.debug:
-        print("## Sampling Data", flush=True)
+    # if src.config.debug:
+    print("## Sampling Data", flush=True)
     target_sampler = GaussianMCMCSampler(target, init_state=target.init_state)
 
     # time intensive step, load from disk
     if exists('data.pt'):
         data = torch.load('data.pt')
+        print("loaded data params")
     else:
         data = target_sampler.sample(500)
         torch.save(data, 'data.pt')
 
-    if src.config.debug:
-        print("## creating prior+flow", flush=True)
+    # if src.config.debug:
+    print("## creating prior+flow", flush=True)
     # throw away 3 translation dims and 3 rotations
     priorDim = target.init_state.shape[1]
     mean = torch.zeros(priorDim).to(ctx)  # cuda version
@@ -56,38 +58,50 @@ def bg(temp=300):
         layers.append(RealNVP(6, priorDim, hidden=[30, 30]))
     flow = SequentialFlow(layers).to(ctx)
 
-    #
     bg = BoltzmannGenerator(prior, flow, target)
 
-    if src.config.debug:
+    if exists("flow_state_dict.pt"):
+        flow.load_state_dict(torch.load("flow_state_dict.pt"))
+        flow.eval()
+        print("loaded prior params")
+    else:
+        # if src.config.debug:
         print("## starting NLL optimiser", flush=True)
 
-    # first training
-    nll_optimizer = torch.optim.Adam(bg.parameters(), lr=1e-3)
-    nll_trainer = bgflow.KLTrainer(bg, optim=nll_optimizer, train_energy=False)
+        # first training
+        nll_optimizer = torch.optim.Adam(bg.parameters(), lr=1e-3)
+        nll_trainer = bgflow.KLTrainer(bg,
+                                       optim=nll_optimizer,
+                                       train_energy=False)
 
-    nll_trainer.train(n_iter=1000,
-                      data=data,
-                      batchsize=100,
-                      n_print=50,
-                      w_energy=0.0)
+        nll_trainer.train(n_iter=500,
+                          data=data,
+                          batchsize=20,
+                          n_print=5,
+                          w_energy=0.0)
 
-    if src.config.debug:
-        print("## starting mixed training", flush=True)
+        torch.save(bg.flow.state_dict(), "flow_state_dict.pt")
 
-    # mixed training
+    # # mixed training
+    # if src.config.debug:
+    print("## starting mixed training", flush=True)
+
     mixed_optimizer = torch.optim.Adam(bg.parameters(), lr=1e-4)
     mixed_trainer = bgflow.KLTrainer(bg,
                                      optim=mixed_optimizer,
                                      train_energy=True)
 
-    mixed_trainer.train(n_iter=2000,
-                        data=data,
-                        batchsize=100,
-                        n_print=50,
-                        w_energy=0.1,
-                        w_likelihood=0.9,
-                        clip_forces=20.0)
+    for i in range(200):
+        mixed_trainer.train(
+            n_iter=1,
+            data=data,
+            batchsize=20,
+            n_print=1,
+            w_energy=0.1,
+            w_likelihood=0.9,
+        )
+
+        torch.save(bg.flow.state_dict(), "flow_state_dict.pt")
 
 
 class RealNVP(SequentialFlow):

@@ -15,7 +15,7 @@
          ALPHA  0.4
        &END MIXING
        &OUTER_SCF  T
-         MAX_SCF  25
+         MAX_SCF  10
          EPS_SCF  1.0E-06
        &END OUTER_SCF
      &END SCF
