@@ -5,11 +5,12 @@ from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
 from torch._C import InferredType
 from .ASEbridge import ASEbridge
 from bgflow import Energy
-from config import CP2K_Path
+
 import torch
 import numpy as np
 import math
-import config
+import src
+import sys
 
 __all__ = ["PerovskiteEnergy"]
 
@@ -85,23 +86,32 @@ class PerovskiteEnergy(Energy):
         # this can be parallised
         for i in range(n):
 
-            try:  #prone to error
+            try:
                 at = self.tensor_to_atoms(x[i, :])
-                MaxwellBoltzmannDistribution(at, temperature_K=temperature)
+            except:  #bad atoms cought
+                ener[i] = math.inf
+                continue
+
+            MaxwellBoltzmannDistribution(at, temperature_K=temperature)
+
+            try:  #prone to error
                 ener[i] = at.get_potential_energy()
             except Exception as e1:  #energy calculation faild due to bad config
 
-                if config.debug == True:
+                if src.config.debug == True:
                     print(
                         "something went wrong with CP2K calculator, resetting\n{}"
                         .format(e1),
                         flush=True)
                 try:
-                    del self.calc
+                    del self.calc  #calculator is corrupted, deconstruct if possible
                 except Exception as e2:
                     pass
 
                 #setup a new calculator,assume the error is due to a bad configuration
                 self.calc = self.ab.get_CP2K_calculator()
                 ener[i] = math.inf
+
+        sys.stdout.flush()
+
         return ener

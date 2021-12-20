@@ -20,23 +20,30 @@ from bgflow.utils.train import IndexBatchIterator
 import bgflow
 
 from os.path import exists
+import src
 
 
 def bg(temp=300):
+    if src.config.debug:
+        print("## creating CP2K", flush=True)
     target = PerovskiteEnergy(temp)
     target.add_init_configuration("Pos2.xyz")  # second phase
 
     ctx = target.ctx
 
+    if src.config.debug:
+        print("## Sampling Data", flush=True)
     target_sampler = GaussianMCMCSampler(target, init_state=target.init_state)
 
     # time intensive step, load from disk
     if exists('data.pt'):
         data = torch.load('data.pt')
     else:
-        data = target_sampler.sample(5)
+        data = target_sampler.sample(500)
         torch.save(data, 'data.pt')
 
+    if src.config.debug:
+        print("## creating prior+flow", flush=True)
     # throw away 3 translation dims and 3 rotations
     priorDim = target.init_state.shape[1]
     mean = torch.zeros(priorDim).to(ctx)  # cuda version
@@ -52,15 +59,21 @@ def bg(temp=300):
     #
     bg = BoltzmannGenerator(prior, flow, target)
 
+    if src.config.debug:
+        print("## starting NLL optimiser", flush=True)
+
     # first training
     nll_optimizer = torch.optim.Adam(bg.parameters(), lr=1e-3)
     nll_trainer = bgflow.KLTrainer(bg, optim=nll_optimizer, train_energy=False)
 
-    nll_trainer.train(n_iter=100,
+    nll_trainer.train(n_iter=1000,
                       data=data,
-                      batchsize=3,
-                      n_print=2,
+                      batchsize=100,
+                      n_print=50,
                       w_energy=0.0)
+
+    if src.config.debug:
+        print("## starting mixed training", flush=True)
 
     # mixed training
     mixed_optimizer = torch.optim.Adam(bg.parameters(), lr=1e-4)
@@ -70,8 +83,8 @@ def bg(temp=300):
 
     mixed_trainer.train(n_iter=2000,
                         data=data,
-                        batchsize=1000,
-                        n_print=100,
+                        batchsize=100,
+                        n_print=50,
                         w_energy=0.1,
                         w_likelihood=0.9,
                         clip_forces=20.0)
