@@ -31,12 +31,15 @@ class PerovskiteEnergy(Energy):
         self.init_state = None
         self.add_init_configuration()
 
+        self.n = 0
+
         super().__init__(self.totaldims)
 
     def add_init_configuration(self, atom_names=None):
         #at = read("{}{}".format(CP2K_Path, name))
         atom_list = self.ab.get_atoms(atom_names)
         for at in atom_list:
+            print("added atom {}".format(at))
             cx = self.atom_to_tensor(at)
 
             if self.init_state is None:
@@ -51,11 +54,10 @@ class PerovskiteEnergy(Energy):
 
     def tensor_to_atoms(self, cx):
         at = self.init_atom
-        c = cx[:6].detach().cpu().numpy()
-
+        c = cx[:6].clone().cpu().numpy()
         c[3:6] = (c[3:6] + 1) * 90
 
-        x = cx[6:].detach().cpu().numpy()
+        x = cx[6:].clone().cpu().numpy()
 
         at.cell = at.cell.fromcellpar(c)
         at.set_positions(x.reshape(self.dims))
@@ -73,6 +75,7 @@ class PerovskiteEnergy(Energy):
 
     def _energy(self, x, temperature=None):
         # calculates CP2K energy for all configurations in x
+
         if temperature is None:
             temperature = self.temp
 
@@ -111,6 +114,10 @@ class PerovskiteEnergy(Energy):
                 #setup a new calculator,assume the error is due to a bad configuration
                 self.calc = self.ab.get_CP2K_calculator()
                 ener[i] = math.inf
+
+            print("{:4d}:{}:{:10.4f}".format(self.n, i, float(ener[i])))
+
+        self.n = self.n + 1
 
         sys.stdout.flush()
 
