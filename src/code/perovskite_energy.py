@@ -18,9 +18,8 @@ __all__ = ["PerovskiteEnergy"]
 # test implememtation, not connectep at the moment
 class PerovskiteEnergy(Energy):
     # name = vsc_account number
-    def __init__(self, temp):
+    def __init__(self):
         self.ab = ASEbridge()
-        self.temp = temp
         self.calc = self.ab.get_CP2K_calculator()
 
         # context tensor torch
@@ -32,6 +31,8 @@ class PerovskiteEnergy(Energy):
         self.add_init_configuration()
 
         self.n = 0
+
+        self.max_ener = 0.0
 
         super().__init__(self.totaldims)
 
@@ -73,11 +74,8 @@ class PerovskiteEnergy(Energy):
         cx = torch.Tensor(np.concatenate((c, x.flatten()))).to(self.ctx)
         return cx
 
-    def _energy(self, x, temperature=None):
+    def _energy(self, x):
         # calculates CP2K energy for all configurations in x
-
-        if temperature is None:
-            temperature = self.temp
 
         if x.dim() == 1:
             x = x.reshape((1, self.totaldims))
@@ -90,34 +88,31 @@ class PerovskiteEnergy(Energy):
 
         # this can be parallised
         for i in range(n):
-
             try:
                 at = self.tensor_to_atoms(x[i, :])
+
+                try:  #prone to error
+                    ener[i] = at.get_potential_energy()
+                except Exception as e1:  #energy calculation faild due to bad config
+
+                    if src.config.debug == True:
+                        print(
+                            "something went wrong with CP2K calculator, resetting\n{}"
+                            .format(e1),
+                            flush=True)
+                    try:
+                        del self.calc  #calculator is corrupted, deconstruct if possible
+                    except:
+                        pass
+
+                    #setup a new calculator,assume the error is due to a bad configuration
+                    self.calc = self.ab.get_CP2K_calculator()
+                    ener[i] = self.max_ener
+
             except:  #bad atoms cought
-                ener[i] = math.inf
-                continue
+                ener[i] = self.max_ener
 
-            MaxwellBoltzmannDistribution(at, temperature_K=temperature)
-
-            try:  #prone to error
-                ener[i] = at.get_potential_energy()
-            except Exception as e1:  #energy calculation faild due to bad config
-
-                if src.config.debug == True:
-                    print(
-                        "something went wrong with CP2K calculator, resetting\n{}"
-                        .format(e1),
-                        flush=True)
-                try:
-                    del self.calc  #calculator is corrupted, deconstruct if possible
-                except Exception as e2:
-                    pass
-
-                #setup a new calculator,assume the error is due to a bad configuration
-                self.calc = self.ab.get_CP2K_calculator()
-                ener[i] = math.inf
-
-            print("{}:{:10.4f}\t".format(i, float(ener[i])),
+            print("{}:{:10.4f} ".format(i, float(ener[i])),
                   end='',
                   flush=True)
 
