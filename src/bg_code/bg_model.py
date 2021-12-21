@@ -8,6 +8,7 @@ from bgflow import NormalDistribution
 from bgflow import BoltzmannGenerator
 
 from os.path import exists
+import src 
 
 
 def bg_model():
@@ -26,10 +27,10 @@ def bg_model():
     prior = NormalDistribution(priorDim, mean=mean)
 
     # having a flow and a prior, we can now define a Boltzmann Generator
-    n_realnvp_blocks = 5
+    n_realnvp_blocks = src.config.bg_rNVP_layers
     layers = []
     for _ in range(n_realnvp_blocks):
-        layers.append(RealNVP(6, priorDim, hidden=[60,60]))
+        layers.append(RealNVP(6, priorDim, hidden= [ src.config.bg_NN_layers for _ in range(src.config.bg_NN_nodes)  ]   ))
     flow = SequentialFlow(layers).to(ctx)
 
     bg = BoltzmannGenerator(prior, flow, target)

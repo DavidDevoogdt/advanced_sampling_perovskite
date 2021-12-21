@@ -22,9 +22,13 @@ def main(args):
         data_folder.mkdir(parents=True)
     #os.system("cp config.py data/{}/config.py".format(args.foldername))
     os.chdir(data_folder.resolve())
-    pickle.dump(args, open('config.pickle', 'wb'))
-    with open('config.txt', 'w') as f:
-        f.write(str(args))
+
+    if exists('config.pickle') and not args.override:
+        print("using existing config, use --override to force new config in existing folder ")
+    else:
+        pickle.dump(args, open('config.pickle', 'wb'))
+        with open('config.txt', 'w') as f:
+            f.write(str(args))
 
     if args.hpc:  # hpc user
         write_submit(rp, args)
@@ -32,7 +36,6 @@ def main(args):
         print("job submitted, folder name {}".format(args.foldername))
     else:  # regular user
         print("folder name {}, running directly".format(args.foldername))
-        src.config = args
         l()
 
 
@@ -52,7 +55,8 @@ if __name__ == "__main__":
     group0 = parser.add_argument_group('general settings', '')
 
     group0.add_argument('-d', '--debug', action='store_true', help='')
-    group0.add_argument('--do_bg', default=True)
+    group0.add_argument('-o','--override', action='store_true', help='ignore args if folder already exists')
+    
 
     group1 = parser.add_argument_group('folders and paths', 'default paths')
     group1.add_argument(
@@ -77,12 +81,22 @@ if __name__ == "__main__":
         help='')
     group1.add_argument('--cp2k_inp', default="orig_cp2k.inp", help='')
 
-    group3 = parser.add_argument_group('hpc params', 'group3 description')
+    group3 = parser.add_argument_group('hpc params', '')
     #hpc stuff
     group3.add_argument('--hpc', action='store_true', help='run script on hpc')
     group3.add_argument('--hpc_walltime', default="72:00:00", help='')
-    group3.add_argument('--hpc_nodes', default=1, help='')
-    group3.add_argument('--hpc_ppn', default=9, help='')
+    group3.add_argument('--hpc_nodes',type=int, default=1, help='')
+    group3.add_argument('--hpc_ppn',type=int, default=9, help='')
+
+    group4 = parser.add_argument_group('Boltzmann generators (bg)', 'parameters to tune bg')
+
+    group4.add_argument('--bg', default=True, help='set to false to skip bg' )
+    group4.add_argument('--bg_train', default=True )
+    group4.add_argument('--bg_path', default=True )
+
+    group4.add_argument('--bg_rNVP_layers',type=int ,default=5, help='number of realNVP layers')
+    group4.add_argument('--bg_NN_layers',type=int, default=3, help='number of hidden layer per densenet')
+    group4.add_argument('--bg_NN_nodes',type=int, default=60,help='number of nodes per densenet layer')
 
     args = parser.parse_args()
 

@@ -4,11 +4,10 @@ import pickle
 
 
 def main():
-    if src.config.do_bg:
+    src.config = pickle.load(open('config.pickle', 'rb'))
+    if src.config.bg:
         bg()
 
 
 if __name__ == "__main__":
-    src.config = pickle.load(open('config.pickle', 'rb'))
-
     main()
