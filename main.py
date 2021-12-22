@@ -1,6 +1,7 @@
 from genericpath import exists
 from loader import main as l
 
+import numpy
 import pathlib
 import time
 import os
@@ -24,7 +25,10 @@ def main(args):
     os.chdir(data_folder.resolve())
 
     if exists('config.pickle') and not args.override:
-        print("using existing config, use --override to force new config in existing folder ")
+        print(
+            "using existing config, use --override to force new config in existing folder "
+        )
+
     else:
         pickle.dump(args, open('config.pickle', 'wb'))
         with open('config.txt', 'w') as f:
@@ -55,8 +59,10 @@ if __name__ == "__main__":
     group0 = parser.add_argument_group('general settings', '')
 
     group0.add_argument('-d', '--debug', action='store_true', help='')
-    group0.add_argument('-o','--override', action='store_true', help='ignore args if folder already exists')
-    
+    group0.add_argument('-o',
+                        '--override',
+                        action='store_true',
+                        help='ignore args if folder already exists')
 
     group1 = parser.add_argument_group('folders and paths', 'default paths')
     group1.add_argument(
@@ -66,7 +72,7 @@ if __name__ == "__main__":
         default=time.strftime("%Y-%m-%d_%H-%M-%S"),
         help='foldername for all output. Default -> current time')
 
-    #no need to specify these:
+    # no need to specify these:
     group1.add_argument('--root_path', default="../..", help='')
     group1.add_argument('--cp2k_path', default="calculator/CP2K", help='')
     group1.add_argument('--cp2k_shell',
@@ -82,21 +88,47 @@ if __name__ == "__main__":
     group1.add_argument('--cp2k_inp', default="orig_cp2k.inp", help='')
 
     group3 = parser.add_argument_group('hpc params', '')
-    #hpc stuff
+    # hpc stuff
     group3.add_argument('--hpc', action='store_true', help='run script on hpc')
     group3.add_argument('--hpc_walltime', default="72:00:00", help='')
-    group3.add_argument('--hpc_nodes',type=int, default=1, help='')
-    group3.add_argument('--hpc_ppn',type=int, default=9, help='')
+    group3.add_argument('--hpc_nodes', type=int, default=1, help='')
+    group3.add_argument('--hpc_ppn', type=int, default=9, help='')
 
-    group4 = parser.add_argument_group('Boltzmann generators (bg)', 'parameters to tune bg')
+    group4 = parser.add_argument_group('Boltzmann generators (bg)',
+                                       'parameters to tune bg')
 
-    group4.add_argument('--bg', default=True, help='set to false to skip bg' )
-    group4.add_argument('--bg_train', default=True )
-    group4.add_argument('--bg_path', default=True )
+    group4.add_argument('--bg', default=True, help='set to false to skip bg')
+    group4.add_argument('--bg_train', default=True)
+    group4.add_argument('--bg_path', default=True)
 
-    group4.add_argument('--bg_rNVP_layers',type=int ,default=5, help='number of realNVP layers')
-    group4.add_argument('--bg_NN_layers',type=int, default=3, help='number of hidden layer per densenet')
-    group4.add_argument('--bg_NN_nodes',type=int, default=60,help='number of nodes per densenet layer')
+    group4.add_argument('--bg_rNVP_layers',
+                        type=int,
+                        default=5,
+                        help='number of realNVP layers')
+    group4.add_argument('--bg_NN_layers',
+                        type=int,
+                        default=3,
+                        help='number of hidden layer per densenet')
+    group4.add_argument('--bg_NN_nodes',
+                        type=int,
+                        default=60,
+                        help='number of nodes per densenet layer')
+
+    group4.add_argument('--bg_batch_size',
+                        type=int,
+                        default=10,
+                        help='batch size for training')
+    group4.add_argument('--bg_nll_rounds', type=int, default=100, help='')
+    group4.add_argument('--bg_kll_rounds',
+                        type=int,
+                        default=200,
+                        help='number of kll training rounds')
+
+    group4.add_argument(
+        '--bg_n_presample',
+        type=int,
+        default=5000,
+        help='number of monte carlo samples starting from init config')
 
     args = parser.parse_args()
 

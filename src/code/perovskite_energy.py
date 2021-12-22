@@ -112,9 +112,7 @@ class PerovskiteEnergy(Energy):
             except:  #bad atoms cought
                 ener[i] = self.max_ener
 
-            print("{}:{:10.4f} ".format(i, float(ener[i])),
-                  end='',
-                  flush=True)
+            print("{}:{:10.4f} ".format(i, float(ener[i])), end='', flush=True)
 
         print("", flush=True)
         self.n = self.n + 1

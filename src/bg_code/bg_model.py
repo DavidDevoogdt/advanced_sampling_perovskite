@@ -8,7 +8,7 @@ from bgflow import NormalDistribution
 from bgflow import BoltzmannGenerator
 
 from os.path import exists
-import src 
+import src
 
 
 def bg_model():
@@ -30,7 +30,13 @@ def bg_model():
     n_realnvp_blocks = src.config.bg_rNVP_layers
     layers = []
     for _ in range(n_realnvp_blocks):
-        layers.append(RealNVP(6, priorDim, hidden= [ src.config.bg_NN_layers for _ in range(src.config.bg_NN_nodes)  ]   ))
+        layers.append(
+            RealNVP(6,
+                    priorDim,
+                    hidden=[
+                        src.config.bg_NN_layers
+                        for _ in range(src.config.bg_NN_nodes)
+                    ]))
     flow = SequentialFlow(layers).to(ctx)
 
     bg = BoltzmannGenerator(prior, flow, target)
@@ -41,6 +47,7 @@ def bg_model():
         print("loaded flow params")
 
     return bg
+
 
 class RealNVP(SequentialFlow):
     def __init__(self, dim1, totaldim, hidden):
