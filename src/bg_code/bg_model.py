@@ -10,6 +10,8 @@ from bgflow import BoltzmannGenerator
 from os.path import exists
 import src
 
+import numpy as np
+
 
 def bg_model():
     # if src.config.debug:
@@ -31,12 +33,9 @@ def bg_model():
     layers = []
     for _ in range(n_realnvp_blocks):
         layers.append(
-            RealNVP(6,
-                    priorDim,
-                    hidden=[
-                        src.config.bg_NN_layers
-                        for _ in range(src.config.bg_NN_nodes)
-                    ]))
+            RealNVP(hidden=[
+                src.config.bg_NN_layers for _ in range(src.config.bg_NN_nodes)
+            ]))
     flow = SequentialFlow(layers).to(ctx)
 
     bg = BoltzmannGenerator(prior, flow, target)
@@ -50,37 +49,81 @@ def bg_model():
 
 
 class RealNVP(SequentialFlow):
-    def __init__(self, dim1, totaldim, hidden):
-        self.dim1 = dim1
-        self.tdim = totaldim
+    def __init__(self, hidden):
+
+        #work out all the details of the layers
+
+        #cell length xyz, cell angles, Cs, Pb, I,I,I
+        self.types = np.array([0, 1, 2, 3, 4, 4, 4])
+        self.sizes = np.array([3, 3, 3, 3, 3])
+
+        ntypes = np.max(self.types) + 1
+        nmemb = len(self.types)
+        self.all = np.cumsum(np.ones(nmemb, dtype=int)) - 1
+        self.totaldim = np.sum(self.sizes[self.types])
+
+        class tinfo:
+            pass
+
+        self.typeinfo = []
+        for i in range(ntypes):
+
+            t = tinfo()
+            t.i = i
+            t.members = np.where(self.types == i)[0]
+            t.size = self.sizes[i]
+            t.nsize = self.totaldim - self.sizes[i]
+
+            self.typeinfo.append(t)
+
         self.hidden = hidden
         super().__init__(self._create_layers())
 
     def _create_layers(self):
-        dim_channel1 = self.dim1
-        dim_channel2 = self.tdim - self.dim1
-        split_into_2 = SplitFlow(dim_channel1, dim_channel2)
 
-        layers = [
-            # -- split
-            split_into_2,
-            # --transform
-            self._coupling_block(dim_channel1, dim_channel2),
-            SwapFlow(),
-            self._coupling_block(dim_channel2, dim_channel1),
-            SwapFlow(),
-            # -- merge
-            InverseFlow(split_into_2)
-        ]
+        split_into_n = SplitFlow(*self.sizes[self.types])
+        layers = [split_into_n]
+
+        sum_d = []
+        mul_d = []
+
+        #create densenets shift and scale
+        for t in self.typeinfo:
+            sum_d.append(
+                DenseNet([t.size, *self.hidden, t.nsize],
+                         activation=torch.nn.ReLU()))
+            mul_d.append(
+                DenseNet([t.size, *self.hidden, t.nsize],
+                         activation=torch.nn.ReLU()))
+
+        #make the flows and apply per type
+        for op in ['sum', 'mul']:
+
+            for t in self.typeinfo:
+                #apply all the shift flows
+                for m in t.members:
+                    ti = self.all.tolist().copy()
+                    ti.remove(m)
+
+                    shiftt = None
+                    scalet = None
+                    if op == "sum":
+                        # shiftt = DenseNet([t.size, *self.hidden, t.nsize],
+                        #                   activation=torch.nn.ReLU())
+                        shiftt = sum_d[t.i]
+                    if op == "mul":
+                        # scalet = DenseNet([t.size, *self.hidden, t.nsize],
+                        #                   activation=torch.nn.ReLU())
+                        scalet = mul_d[t.i]
+
+                    l = CouplingFlow(AffineTransformer(
+                        shift_transformation=shiftt,
+                        scale_transformation=scalet),
+                                     transformed_indices=tuple(ti),
+                                     cond_indices=(m, ))
+
+                    layers.append(l)
+
+        layers.append(InverseFlow(split_into_n))
+
         return layers
-
-    def _dense_net(self, dim1, dim2):
-
-        layers = [dim1, *self.hidden, dim2]
-        return DenseNet(layers, activation=torch.nn.ReLU())
-
-    def _coupling_block(self, dim1, dim2):
-        return CouplingFlow(
-            AffineTransformer(shift_transformation=self._dense_net(dim1, dim2),
-                              scale_transformation=self._dense_net(dim1,
-                                                                   dim2)))
