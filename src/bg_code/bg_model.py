@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
+from bgflow.nn.flow.base import Flow
 import torch
 from src.code.perovskite_energy import PerovskiteEnergy
 from bgflow.nn import (DenseNet, SequentialFlow, CouplingFlow, AffineFlow,
-                       SplitFlow, InverseFlow, SwapFlow, AffineTransformer)
+                       SplitFlow, InverseFlow, SwapFlow, AffineTransformer,
+                       WrapFlow)
 from bgflow import NormalDistribution
 from bgflow import BoltzmannGenerator
 
@@ -31,11 +33,31 @@ def bg_model():
     # having a flow and a prior, we can now define a Boltzmann Generator
     n_realnvp_blocks = src.config.bg_rNVP_layers
     layers = []
+
+    types = np.array([0, 1, 2, 3, 4, 4, 4])
+    sizes = np.array([3, 3, 3, 3, 3])
+
+    split_into_n = SplitFlow(*sizes[types])
+
+    layers.append(split_into_n)
     for _ in range(n_realnvp_blocks):
         layers.append(
             RealNVP(hidden=[
                 src.config.bg_NN_layers for _ in range(src.config.bg_NN_nodes)
-            ]))
+            ],
+                    types=types,
+                    sizes=sizes))
+    layers.append(InverseFlow(split_into_n))
+
+    mu = target.init_state[0].clone().detach() * 0
+    mu[3:6] = 90  #angle
+
+    sigma = target.init_state[0].clone().detach()
+    sigma = sigma * 0 + 1
+    sigma[3:6] = sigma[3:6] * 10  #variance of 10 degrees for angle
+
+    layers.append(InverseFlow(normData(mu, sigma)))
+
     flow = SequentialFlow(layers).to(ctx)
 
     bg = BoltzmannGenerator(prior, flow, target)
@@ -48,31 +70,54 @@ def bg_model():
     return bg
 
 
-class RealNVP(SequentialFlow):
-    def __init__(self, hidden):
+class normData(Flow):
+    def __init__(self, mu=None, sigma=None):
+        super().__init__()
+        self.mu = mu
+        self.sigma = sigma
 
-        #work out all the details of the layers
+    def _forward(self, xs, **kwargs):
+        if self.mu is not None:
+            xs = xs - self.mu
+        if self.sigma is not None:
+            xs = xs / self.sigma
+
+        dlogp = 0
+
+        return (xs, dlogp)
+
+    def _inverse(self, xs, **kwargs):
+        if self.sigma is not None:
+            xs = xs * self.sigma
+        if self.mu is not None:
+            xs = xs + self.mu
+
+        dlogp = 0
+
+        return (*xs, dlogp)
+
+
+class RealNVP(SequentialFlow):
+    def __init__(self, hidden, types, sizes):
 
         #cell length xyz, cell angles, Cs, Pb, I,I,I
-        self.types = np.array([0, 1, 2, 3, 4, 4, 4])
-        self.sizes = np.array([3, 3, 3, 3, 3])
+        self.types = types
+        self.sizes = sizes
 
-        ntypes = np.max(self.types) + 1
-        nmemb = len(self.types)
-        self.all = np.cumsum(np.ones(nmemb, dtype=int)) - 1
-        self.totaldim = np.sum(self.sizes[self.types])
+        self.ntypes = np.max(self.types) + 1
 
         class tinfo:
             pass
 
         self.typeinfo = []
-        for i in range(ntypes):
+        for i in range(self.ntypes):
 
             t = tinfo()
             t.i = i
-            t.members = np.where(self.types == i)[0]
+            t.members = np.argwhere(self.types == i).flatten().tolist()
+            t.other_members = np.argwhere(self.types != i).flatten().tolist()
+
             t.size = self.sizes[i]
-            t.nsize = self.totaldim - self.sizes[i]
 
             self.typeinfo.append(t)
 
@@ -81,49 +126,66 @@ class RealNVP(SequentialFlow):
 
     def _create_layers(self):
 
-        split_into_n = SplitFlow(*self.sizes[self.types])
-        layers = [split_into_n]
+        layers = []
 
         sum_d = []
         mul_d = []
 
-        #create densenets shift and scale
+        #create densenets shift and scale from every type to every other type
         for t in self.typeinfo:
-            sum_d.append(
-                DenseNet([t.size, *self.hidden, t.nsize],
-                         activation=torch.nn.ReLU()))
-            mul_d.append(
-                DenseNet([t.size, *self.hidden, t.nsize],
-                         activation=torch.nn.ReLU()))
+            sub_sum = []
+            sub_mul = []
 
-        #make the flows and apply per type
-        for op in ['sum', 'mul']:
+            for ot in self.typeinfo:
+                sub_sum.append(
+                    DenseNet([t.size, *self.hidden, ot.size],
+                             activation=torch.nn.ReLU()))
 
-            for t in self.typeinfo:
-                #apply all the shift flows
-                for m in t.members:
-                    ti = self.all.tolist().copy()
-                    ti.remove(m)
+                sub_mul.append(
+                    DenseNet([t.size, *self.hidden, ot.size],
+                             activation=torch.nn.ReLU()))
 
-                    shiftt = None
-                    scalet = None
-                    if op == "sum":
-                        # shiftt = DenseNet([t.size, *self.hidden, t.nsize],
-                        #                   activation=torch.nn.ReLU())
-                        shiftt = sum_d[t.i]
-                    if op == "mul":
-                        # scalet = DenseNet([t.size, *self.hidden, t.nsize],
-                        #                   activation=torch.nn.ReLU())
-                        scalet = mul_d[t.i]
+            sum_d.append(sub_sum)
+            mul_d.append(sub_mul)
+
+        for t in self.typeinfo:
+            #apply map to different species
+            for m in t.members:
+
+                for om in t.other_members:
+
+                    t2 = self.typeinfo[self.types[om]]
 
                     l = CouplingFlow(AffineTransformer(
-                        shift_transformation=shiftt,
-                        scale_transformation=scalet),
-                                     transformed_indices=tuple(ti),
-                                     cond_indices=(m, ))
+                        shift_transformation=sum_d[t.i][t2.i],
+                        scale_transformation=mul_d[t.i][t2.i]),
+                                     transformed_indices=(m, ),
+                                     cond_indices=(om, ))
 
                     layers.append(l)
 
-        layers.append(InverseFlow(split_into_n))
+            #apply map to equal species, sum first
+            for m in t.members:
+                for om in t.members:
+                    if m != om:
+                        l = CouplingFlow(AffineTransformer(
+                            shift_transformation=sum_d[t.i][t.i],
+                            scale_transformation=None),
+                                         transformed_indices=(m, ),
+                                         cond_indices=(om, ))
+
+                        layers.append(l)
+
+            #apply map to equal species, multiply
+            for m in t.members:
+                for om in t.members:
+                    if m != om:
+                        l = CouplingFlow(AffineTransformer(
+                            shift_transformation=None,
+                            scale_transformation=mul_d[t.i][t.i]),
+                                         transformed_indices=(m, ),
+                                         cond_indices=(om, ))
+
+                        layers.append(l)
 
         return layers
