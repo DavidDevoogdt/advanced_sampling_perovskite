@@ -72,6 +72,8 @@ if __name__ == "__main__":
         default=time.strftime("%Y-%m-%d_%H-%M-%S"),
         help='foldername for all output. Default -> current time')
 
+    group1.add_argument('--pf', default="", help='')
+
     # no need to specify these:
     group1.add_argument('--root_path', default="../..", help='')
     group1.add_argument('--cp2k_path', default="calculator/CP2K", help='')
@@ -98,31 +100,39 @@ if __name__ == "__main__":
                                        'parameters to tune bg')
 
     group4.add_argument('--bg', default=True, help='set to false to skip bg')
-    group4.add_argument('--bg_train', default=True)
-    group4.add_argument('--bg_path', default=True)
+    group4.add_argument('--bg_no_train', action='store_true')
+    group4.add_argument('--bg_no_path', action='store_true')
 
     group4.add_argument('--bg_rNVP_layers',
                         type=int,
-                        default=5,
+                        default=11,
                         help='number of realNVP layers')
     group4.add_argument('--bg_NN_layers',
                         type=int,
-                        default=3,
+                        default=2,
                         help='number of hidden layer per densenet')
     group4.add_argument('--bg_NN_nodes',
                         type=int,
-                        default=60,
+                        default=5,
                         help='number of nodes per densenet layer')
 
     group4.add_argument('--bg_batch_size',
                         type=int,
-                        default=10,
+                        default=1,
                         help='batch size for training')
-    group4.add_argument('--bg_nll_rounds', type=int, default=100, help='')
+    group4.add_argument('--bg_nll_rounds', type=int, default=1000, help='')
     group4.add_argument('--bg_kll_rounds',
                         type=int,
-                        default=200,
+                        default=2000,
                         help='number of kll training rounds')
+    group4.add_argument('--bg_nll_lr',
+                        type=float,
+                        default=1e-2,
+                        help='learning rate kll training')
+    group4.add_argument('--bg_kll_lr',
+                        type=float,
+                        default=1e-2,
+                        help='learning rate kll training')
 
     group4.add_argument(
         '--bg_n_presample',

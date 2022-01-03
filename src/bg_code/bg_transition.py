@@ -23,18 +23,12 @@ def bg_transition(bg: BoltzmannGenerator):
 
     atom_list = []
 
-    for w in np.linspace(0, 1, 10):
+    for w in np.linspace(0, 1, 200):
         c_prior = torch.lerp(a_prior, b_prior, w)
         (c, _) = flow.forward(c_prior)
         atom = target.tensor_to_atoms(c).copy()
-        atom_list.append(atom)
+        atom_periodic = atom.repeat(3)
+        atom_list.append(atom_periodic)
 
-    # some fancy plotting :p
-
-    # print(atom_list)
-
-    with open('interp.xyz', 'w') as f:
-        write_extxyz(f, atom_list)
-
-    # with open('interp.pdb','w') as f:
-    #     write_proteindatabank(f, atom_list)
+    with open('interp.pdb', 'w') as f:
+        write_proteindatabank(f, atom_list)

@@ -56,7 +56,7 @@ class PerovskiteEnergy(Energy):
     def tensor_to_atoms(self, cx):
         at = self.init_atom
         c = cx[:6].clone().cpu().detach().numpy()
-        c[3:6] = (c[3:6] + 1) * 90
+        # c[3:6] = (c[3:6] + 1) * 90
 
         x = cx[6:].clone().cpu().detach().numpy()
 
@@ -69,7 +69,7 @@ class PerovskiteEnergy(Energy):
     def atom_to_tensor(self, at):
         x = at.get_positions()
         c = at.get_cell().cellpar()
-        c[3:6] = c[3:6] / 90 - 1  #mean 0
+        # c[3:6] = c[3:6] / 90 - 1  #mean 0
 
         cx = torch.Tensor(np.concatenate((c, x.flatten()))).to(self.ctx)
         return cx
