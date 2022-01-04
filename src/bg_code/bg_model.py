@@ -53,10 +53,16 @@ def bg_model():
     mu[3:6] = 90  #angle
 
     sigma = target.init_state[0].clone().detach()
-    sigma = sigma * 0 + 1
-    sigma[3:6] = sigma[3:6] * 10  #variance of 10 degrees for angle
+    sigma = sigma * 0 + src.config.sigma_L  # var of 0.1 nm for unit cell sizes and atom pos
+    sigma[3:6] = src.config.sigma_deg  #variance of 2 degrees for angle
 
-    layers.append(InverseFlow(normData(mu, sigma)))
+    print(sigma)
+    print(mu)
+
+    normflow = normData(mu, sigma)
+
+    layers.append(InverseFlow(normflow))
+    layers.append(normflow)
 
     flow = SequentialFlow(layers).to(ctx)
 
@@ -67,7 +73,7 @@ def bg_model():
         bg.flow.eval()
         print("loaded flow params")
 
-    return bg
+    return bg, sigma
 
 
 class normData(Flow):
@@ -76,25 +82,38 @@ class normData(Flow):
         self.mu = mu
         self.sigma = sigma
 
-    def _forward(self, xs, **kwargs):
-        if self.mu is not None:
-            xs = xs - self.mu
-        if self.sigma is not None:
-            xs = xs / self.sigma
+    def _forward(self, *xs, **kwargs):
 
-        dlogp = 0
+        y = []
 
-        return (xs, dlogp)
+        for x in xs:
+            if self.mu is not None:
+                x = x - self.mu
+            if self.sigma is not None:
+                x = x / self.sigma
 
-    def _inverse(self, xs, **kwargs):
-        if self.sigma is not None:
-            xs = xs * self.sigma
-        if self.mu is not None:
-            xs = xs + self.mu
+            y.append(x)
 
-        dlogp = 0
+        n_batch = len(y)
+        dlogp = torch.zeros(n_batch, 1).to(x[0])
 
-        return (*xs, dlogp)
+        return (*y, dlogp)
+
+    def _inverse(self, *xs, **kwargs):
+        y = []
+
+        for x in xs:
+            if self.sigma is not None:
+                x = x * self.sigma
+            if self.mu is not None:
+                x = x + self.mu
+
+            y.append(x)
+
+        n_batch = len(y)
+        dlogp = torch.zeros(n_batch, 1).to(xs[0])
+
+        return (*y, dlogp)
 
 
 class RealNVP(SequentialFlow):

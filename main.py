@@ -73,6 +73,15 @@ if __name__ == "__main__":
         help='foldername for all output. Default -> current time')
 
     group1.add_argument('--pf', default="", help='')
+    group1.add_argument('-T', type=int, default=600, help='temp in K')
+    group1.add_argument('--sigma_L',
+                        type=float,
+                        default=0.1,
+                        help='var lengt sampling in nm')
+    group1.add_argument('--sigma_deg',
+                        type=float,
+                        default=2.0,
+                        help='var angle sampling in deg')
 
     # no need to specify these:
     group1.add_argument('--root_path', default="../..", help='')

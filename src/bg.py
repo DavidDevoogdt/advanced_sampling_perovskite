@@ -10,12 +10,14 @@ from src.bg_code.bg_transition import bg_transition
 import wandb
 
 
-def bg(temp=300):
+def bg():
 
     if src.config.pf != "":
         os.system("cp ../{}/data.pt data.pt".format(src.config.pf))
 
-    bg = bg_model()
+    temp = src.config.T
+
+    bg, sigma = bg_model()
     if src.config.bg_no_train:
         if exists("../{}/flow_state_dict.pt".format(src.config.pf)):
             os.system("cp ../{}/flow_state_dict.pt flow_state_dict.pt".format(
@@ -23,6 +25,6 @@ def bg(temp=300):
         else:
             raise Exception("no flow state dict found in pf")
     else:
-        bg_train(bg, temp)
+        bg_train(bg, temp, sigma)
     if not src.config.bg_no_path:
         bg_transition(bg)

@@ -56,8 +56,6 @@ class PerovskiteEnergy(Energy):
     def tensor_to_atoms(self, cx):
         at = self.init_atom
         c = cx[:6].clone().cpu().detach().numpy()
-        # c[3:6] = (c[3:6] + 1) * 90
-
         x = cx[6:].clone().cpu().detach().numpy()
 
         at.cell = at.cell.fromcellpar(c)
@@ -69,7 +67,6 @@ class PerovskiteEnergy(Energy):
     def atom_to_tensor(self, at):
         x = at.get_positions()
         c = at.get_cell().cellpar()
-        # c[3:6] = c[3:6] / 90 - 1  #mean 0
 
         cx = torch.Tensor(np.concatenate((c, x.flatten()))).to(self.ctx)
         return cx
@@ -110,9 +107,11 @@ class PerovskiteEnergy(Energy):
                     ener[i] = self.max_ener
 
             except:  #bad atoms cought
+                if src.config.debug == True:
+                    print("bad geometry {}".format(x), flush=True)
                 ener[i] = self.max_ener
 
-            print("{}:{:10.4f} ".format(i, float(ener[i])), end='', flush=True)
+            print("{}:{:10.4f}".format(i, float(ener[i])), end='', flush=True)
 
         print("", flush=True)
         self.n = self.n + 1

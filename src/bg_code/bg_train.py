@@ -15,10 +15,12 @@ from os.path import exists
 import src
 
 
-def bg_train(bg: BoltzmannGenerator, temp):
+def bg_train(bg: BoltzmannGenerator, temp,sigma):
 
     # if src.config.debug:
     print("## Sampling Data", flush=True)
+
+    print("temp {}".format(temp * kB))
 
     # time intensive step, load from disk
     if exists("data.pt"):
@@ -28,7 +30,8 @@ def bg_train(bg: BoltzmannGenerator, temp):
         target = bg._target
         target_sampler = GaussianMCMCSampler(target,
                                              init_state=target.init_state,
-                                             temperature=temp * kB)
+                                             temperature=temp * kB,
+                                             noise_std=sigma)
 
         for i in range(src.config.bg_n_presample):
             data = target_sampler.sample(5)
